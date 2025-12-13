@@ -1,8 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
+
 import React from "react";
+import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../Layout/MainLayout";
 import DashboardLayout from "../Layout/DashboardLayout";
-
 // Public Pages
 import Home from "../Pages/Home";
 import Login from "../Pages/Login";
@@ -16,7 +16,7 @@ import ManageTickets from "../Pages/Dashboard/Admin/ManageTickets";
 
 // User Pages
 import MyBookings from "../Pages/Dashboard/User/MyBookings";
-import UserProfile from "../Pages/Dashboard/User/UserProfile"; // Create a basic profile page
+import UserProfile from "../Pages/Dashboard/User/UserProfile";
 
 // Guards
 import PrivateRoute from "./PrivateRoute";
