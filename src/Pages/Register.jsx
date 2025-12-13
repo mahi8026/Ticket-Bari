@@ -96,141 +96,104 @@ const Register = () => {
 
   return (
     <div className="hero min-h-screen bg-base-200">
-           {" "}
       <div className="hero-content flex-col lg:flex-row-reverse">
-               {" "}
         <div className="text-center lg:text-left">
-                    <h1 className="text-5xl font-bold">Register Now!</h1>       
-           {" "}
+          <h1 className="text-5xl font-bold">Register Now!</h1>
           <p className="py-6">
-                        Join TicketBari to book your bus, train, launch, and
-            flight tickets             easily and securely.          {" "}
+            Join TicketBari to book your bus, train, launch, and flight tickets
+            easily and securely.
           </p>
-                 {" "}
         </div>
-               {" "}
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-                   {" "}
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-                       {" "}
             <div className="form-control">
-                           {" "}
               <label className="label">
-                                <span className="label-text">Name</span>       
-                     {" "}
+                <span className="label-text">Name</span>
               </label>
-                           {" "}
               <input
                 type="text"
                 {...register("name", { required: true })}
                 placeholder="Name"
                 className="input input-bordered"
               />
-                           {" "}
               {errors.name && (
                 <span className="text-red-500 text-xs mt-1">
-                                    Name is required                {" "}
+                  Name is required
                 </span>
               )}
-                         {" "}
             </div>
-                       {" "}
             <div className="form-control">
-                           {" "}
               <label className="label">
-                                <span className="label-text">Email</span>       
-                     {" "}
+                <span className="label-text">Email</span>
               </label>
-                           {" "}
               <input
                 type="email"
                 {...register("email", { required: true })}
                 placeholder="Email"
                 className="input input-bordered"
               />
-                           {" "}
               {errors.email && (
                 <span className="text-red-500 text-xs mt-1">
-                                    Email is required                {" "}
+                  Email is required
                 </span>
               )}
-                         {" "}
             </div>
-                       {" "}
             <div className="form-control">
-                           {" "}
               <label className="label">
-                                <span className="label-text">Photo URL</span>   
-                         {" "}
+                {" "}
+                <span className="label-text">Photo URL</span>
               </label>
-                           {" "}
               <input
                 type="text"
                 {...register("photoURL")}
                 placeholder="Photo URL (Optional)"
                 className="input input-bordered"
               />
-                         {" "}
             </div>
-                       {" "}
             <div className="form-control">
-                           {" "}
               <label className="label">
-                                <span className="label-text">Password</span>   
-                         {" "}
+                <span className="label-text">Password</span>
               </label>
-                           {" "}
               <input
                 type="password"
                 {...register("password", {
                   required: true,
-                  minLength: 6, // Custom validation regex for Upper/Lower case
+                  minLength: 6,
                   pattern: /(?=.*[A-Z])(?=.*[a-z])/,
                 })}
                 placeholder="Password"
                 className="input input-bordered"
               />
-                            {/* Validation Feedback */}             {" "}
+
               {errors.password?.type === "required" && (
                 <p className="text-red-500 text-xs mt-1">
-                                    Password is required                {" "}
+                  {" "}
+                  Password is required
                 </p>
               )}
-                           {" "}
               <div className="text-xs mt-2 space-y-1">
-                               {" "}
                 <p
                   className={isLengthValid ? "text-green-600" : "text-red-500"}
                 >
-                                    Length must be at least 6 characters        
-                         {" "}
+                  {" "}
+                  Length must be at least 6 characters
                 </p>
-                               {" "}
                 <p className={hasUppercase ? "text-green-600" : "text-red-500"}>
-                                    Must have an Uppercase letter              
-                   {" "}
+                  Must have an Uppercase letter
                 </p>
-                               {" "}
                 <p className={hasLowercase ? "text-green-600" : "text-red-500"}>
-                                    Must have a Lowercase letter                {" "}
+                  Must have a Lowercase letter
                 </p>
-                             {" "}
               </div>
-                         {" "}
             </div>
-                       {" "}
             <div className="form-control mt-6">
-                           {" "}
               <button type="submit" className="btn btn-primary">
-                                Register              {" "}
+                Register
               </button>
-                         {" "}
             </div>
-                     {" "}
           </form>
-                   {" "}
           <div className="px-8 pb-4 text-center">
-                        <p className="mb-2">Or Register with</p>           {" "}
+            <p className="mb-2">Or Register with</p>
             <button
               onClick={handleGoogleSignIn}
               className="btn btn-circle btn-outline"
@@ -260,23 +223,16 @@ const Register = () => {
                   fill="#34A853"
                 />
               </svg>
-                         {" "}
             </button>
-                       {" "}
             <p className="mt-4">
-                            Already have an account?              {" "}
+              Already have an account?
               <Link to="/login" className="text-primary font-bold link">
-                                Login              {" "}
+                Login
               </Link>
-                         {" "}
             </p>
-                     {" "}
           </div>
-                 {" "}
         </div>
-             {" "}
       </div>
-         {" "}
     </div>
   );
 };
