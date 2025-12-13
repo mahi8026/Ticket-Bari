@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; // 💡 Import Link
+import { Link } from "react-router-dom"; 
 
 const MyBookings = () => {
   const { user, loading: authLoading } = useAuth();
-  const axiosSecure = useAxiosSecure(); // 1. Fetch ALL bookings filtered by the logged-in user's email
+  const axiosSecure = useAxiosSecure(); 
 
   const {
     data: bookings = [],
@@ -16,14 +16,12 @@ const MyBookings = () => {
     queryKey: ["myBookings", user?.email],
     enabled: !authLoading && !!user?.email,
     queryFn: async () => {
-      // Endpoint: /bookings?email=user@example.com
       const res = await axiosSecure.get(`/bookings?email=${user.email}`);
       return res.data;
     },
-  }); // 2. Handle Booking Deletion/Cancellation
+  }); 
 
   const handleDeleteBooking = (booking) => {
-    // Block cancellation if it's already paid or processed
     if (booking.status === "paid") {
       Swal.fire(
         "Action Blocked",
@@ -33,8 +31,7 @@ const MyBookings = () => {
       return;
     }
 
-    // NOTE: If status is 'approved', cancelling means telling the vendor.
-    // We are implementing simple DELETE here, which is fine for 'pending' or 'rejected'.
+    
     const actionText =
       booking.status === "approved"
         ? "This will cancel your approved reservation."
@@ -50,7 +47,7 @@ const MyBookings = () => {
       confirmButtonText: "Yes, Cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // DELETE backend endpoint for bookings
+        
         axiosSecure.delete(`/bookings/${booking._id}`).then((res) => {
           if (res.data.deletedCount > 0) {
             refetch();
@@ -59,8 +56,7 @@ const MyBookings = () => {
               text: `Your booking for ${booking.title} has been cancelled.`,
               icon: "success",
               timer: 1500,
-            }); // NOTE: Ideally, if cancelling an 'approved' booking,
-            // you should also update the ticket stock here.
+            }); 
           }
         });
       }
@@ -104,7 +100,7 @@ const MyBookings = () => {
                   ? "badge-info"
                   : booking.status === "rejected"
                   ? "badge-error"
-                  : "badge-warning"; // pending
+                  : "badge-warning";
 
               return (
                 <tr key={booking._id}>
@@ -122,7 +118,7 @@ const MyBookings = () => {
                   </td>
                   <td>
                     {
-                      // Action Button Logic
+                    
                       booking.status === "approved" ? (
                         <Link
                           to="/dashboard/payment" 
