@@ -3,10 +3,11 @@ import { Outlet, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import { FaBus, FaEnvelope, FaPhone, FaFacebook } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6"; // New X logo
+import { FaXTwitter } from "react-icons/fa6"; 
 import Footer from "../components/Shared/Footer";
-
-
+import LoadingSpinner from "../components/Shared/LoadingSpinner";
+import useRole from "../hooks/useRole";
+import useAuth from "../hooks/useAuth";
 
 
 const Navbar = () => {
@@ -29,6 +30,8 @@ const Navbar = () => {
       )}
     </>
   );
+
+  
 
   return (
     <div className="navbar bg-base-100 sticky top-0 z-40 shadow-md">
@@ -113,15 +116,24 @@ const Navbar = () => {
 
 
 
-const MainLayout = () => (
-  <div>
-    <Navbar />
-    <main className="min-h-[calc(100vh-200px)] pt-4">
-      <Outlet /> {/* Main content area */}
-    </main>
-    <Footer></Footer>
-  </div>
-);
+const MainLayout = () => {
+    const { loading: authLoading } = useAuth();
+    const { isRoleLoading } = useRole(); 
+
+    if (authLoading || isRoleLoading) {
+        return <LoadingSpinner />;
+    }
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="grow pt-4 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+                <Outlet />
+            </main>
+            <Footer />
+        </div>
+    );
+};
 
 export default MainLayout;
 

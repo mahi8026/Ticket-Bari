@@ -73,10 +73,37 @@ const ManageUsers = () => {
     });
   };
 
+  const handleMarkAsFraud = (user) => {
+    Swal.fire({
+      title: "Mark as Fraud?",
+      text: `Vendor: ${user.name} will be marked as fraud. All their tickets will be hidden.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Mark Fraud!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.patch(`/users/fraud/${user._id}`).then((res) => {
+          if (res.data.userUpdateResult.modifiedCount > 0) {
+            refetch();
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: `${user.name} is now marked as FRAUD!`,
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          }
+        });
+      }
+    });
+  };
+
   if (isLoading)
     return (
       <div className="text-center p-10">
-        <span className="loading loading-spinner loading-lg"></span>
+      <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
 
@@ -88,23 +115,16 @@ const ManageUsers = () => {
       </div>
       <div className="overflow-x-auto">
         <table className="table table-zebra w-full">
-        
           <thead className="bg-base-200">
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions (Role)</th>
-              <th>Action (Delete)</th>
+            <tr> <th>#</th> <th>Name</th>
+              <th>Email</th> <th>Role</th>
+              <th>Actions</th> 
             </tr>
           </thead>
           <tbody>
             {users.map((user, index) => (
-              <tr key={user._id}>
-                <th>{index + 1}</th>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
+              <tr key={user._id}> <th>{index + 1}</th>
+                <td>{user.name}</td> <td>{user.email}</td>
                 <td>
                   <span
                     className={`badge ${
@@ -113,42 +133,45 @@ const ManageUsers = () => {
                         : user.role === "vendor"
                         ? "badge-secondary"
                         : "badge-ghost"
-                    }`}
-                  >
-                    {user.role || "User"}
+                    } ${user.role === "fraud" ? "badge-error" : ""}`}
+                  > {user.role || "User"}
                   </span>
                 </td>
-                <td className="flex gap-2">
-                  {user.role === "admin" ? (
-                    "Admin"
-                  ) : (
+                <td className="flex items-center gap-2">
+                  {user.role !== "admin" && user.role !== "fraud" && (
                     <button
                       onClick={() => handleMakeAdmin(user)}
                       className="btn btn-sm btn-circle btn-outline btn-primary tooltip"
                       data-tip="Make Admin"
-                    >
-                      <FaUserShield className="text-lg" />
+                    > <FaUserShield className="text-lg" />
                     </button>
                   )}
-
-                  {user.role === "vendor" ? (
-                    "Vendor"
-                  ) : (
+                  {user.role !== "vendor" &&
+                    user.role !== "admin" &&
+                    user.role !== "fraud" && (
+                      <button
+                        onClick={() => handleMakeVendor(user)}
+                        className="btn btn-sm btn-circle btn-outline btn-secondary tooltip"
+                        data-tip="Make Vendor"
+                      > <FaStore className="text-lg" />
+                      </button>
+                    )}
+                  {user.role === "vendor" && (
                     <button
-                      onClick={() => handleMakeVendor(user)}
-                      className="btn btn-sm btn-circle btn-outline btn-secondary tooltip"
-                      data-tip="Make Vendor"
-                    >
-                      <FaStore className="text-lg" />
+                      onClick={() => handleMarkAsFraud(user)}
+                      className="btn btn-sm btn-error text-white tooltip"
+                      data-tip="Mark Vendor as Fraud"
+                    > Mark Fraud 
                     </button>
                   )}
-                </td>
-                <td>
+                  {user.role === "fraud" && (
+                    <span className="text-error font-bold">BANNED</span>
+                  )}
                   <button
                     onClick={() => handleDeleteUser(user)}
-                    className="btn btn-ghost btn-lg text-red-600"
-                  >
-                    <FaTrashAlt />
+                    className="btn btn-sm btn-ghost text-red-600 tooltip"
+                    data-tip="Delete User"
+                  > <FaTrashAlt className="text-lg" />
                   </button>
                 </td>
               </tr>

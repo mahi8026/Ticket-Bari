@@ -29,6 +29,9 @@ import AddTicket from "../Pages/Dashboard/Vendor/AddTicket";
 
 import useRole from "../hooks/useRole"; // Assuming this is the correct path to your custom hook
 import { Navigate } from "react-router-dom";
+import ErrorPage from "../Pages/ErrorPage";
+import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
+import AdvertiseTickets from "../Pages/Dashboard/Admin/AdvertiseTickets";
 
 const DefaultDashboardRoute = () => {
   const { role, isRoleLoading } = useRole();
@@ -57,6 +60,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "/", element: <Home /> },
       { path: "login", element: <Login /> },
@@ -90,10 +94,7 @@ export const router = createBrowserRouter([
         path: "my-bookings",
         element: <MyBookings />,
       },
-      {
-        path: "profile",
-        element: <UserProfile />,
-      },
+      
 
       // --- Vendor Routes ---
       {
@@ -126,6 +127,15 @@ export const router = createBrowserRouter([
       },
 
       // --- Admin Routes ---
+
+      {
+        path: "profile",
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
+      },
       {
         path: "manage-users",
         element: (
@@ -146,7 +156,7 @@ export const router = createBrowserRouter([
         path: "advertise-tickets",
         element: (
           <AdminRoute>
-            <ManageTickets />
+            <AdvertiseTickets></AdvertiseTickets>
           </AdminRoute>
         ),
       },
