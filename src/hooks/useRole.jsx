@@ -1,31 +1,46 @@
-// --- Inside useRole.jsx ---
+
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "./useAxiosSecure"; // Must import useAxiosSecure
+import useAxiosSecure from "./useAxiosSecure";
 import useAuth from "./useAuth";
 
 const useRole = () => {
-    const { user, loading } = useAuth(); // Auth loading state
-    const axiosSecure = useAxiosSecure();
+  const { user, loading: isAuthLoading } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
-    const { 
-        data: roleData, 
-        isPending: isRoleLoading 
-    } = useQuery({
-        queryKey: [user?.email, "userRole"],
-        
-        // CRITICAL: The query runs ONLY when Auth is NOT loading AND user email exists.
-        enabled: !loading && !!user?.email, 
-        
-        queryFn: async () => {
-            console.log("Fetching role for:", user.email); // ADD THIS LOG to see it fire
-            const res = await axiosSecure.get(`/users/role/${user.email}`);
-            return res.data;
-        }
-    });
+  const {
+    data: roleData,
+    isPending: isQueryPending, 
+    isError,
+    isFetched,
+  } = useQuery({
+    queryKey: [user?.email, "userRole"],
+    enabled: !isAuthLoading && !!user?.email,
 
-    const role = roleData?.role || 'user';
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users/role/${user.email}`);
+      return res.data;
+    },
+    staleTime: 5 * 60 * 1000, 
+  }); 
 
-    return { role, isRoleLoading };
+  let role;
+  if (roleData?.role) {
+    role = roleData.role;
+  } else if (isAuthLoading) {
+    role = "guest"; 
+  } else if (isError) {
+    role = "user";
+  } else {
+    role = user ? "user" : "guest"; 
+  } 
+
+  const isLoading = isAuthLoading || isQueryPending; 
+  if (!isAuthLoading && !!user?.email && !isFetched) {
+    const isStillCheckingRole = true;
+    return { role: "guest", isLoading: isStillCheckingRole };
+  }
+
+  return { role, isLoading };
 };
 
 export default useRole;

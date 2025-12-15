@@ -8,15 +8,13 @@ import {
   FaPlusCircle,
   FaHistory,
 } from "react-icons/fa";
-import useRole from "../hooks/useRole"; 
+import useRole from "../hooks/useRole";
 import React from "react";
 import { FaBus } from "react-icons/fa6";
-
 
 const DashboardLayout = () => {
   const { user, logOut } = useContext(AuthContext);
   const { role, isLoading } = useRole();
-
 
   let sidebarItems;
 
@@ -24,7 +22,7 @@ const DashboardLayout = () => {
     sidebarItems = (
       <>
         <li>
-          <Link to="profile">
+          <Link to="admin-profile">
             <FaUser /> Admin Profile
           </Link>
         </li>
@@ -49,8 +47,13 @@ const DashboardLayout = () => {
     sidebarItems = (
       <>
         <li>
-          <Link to="profile">
-            <FaUser /> Vendor Profile
+          <Link to="vendor-overview">
+            <FaChartBar /> Dashboard Overview
+          </Link>
+        </li>
+        <li>
+          <Link to="vendor-profile">
+          <FaUser /> Vendor Profile 
           </Link>
         </li>
         <li>
@@ -70,7 +73,7 @@ const DashboardLayout = () => {
         </li>
       </>
     );
-  } else {
+  } else if (role === "user") {
     sidebarItems = (
       <>
         <li>
@@ -109,7 +112,7 @@ const DashboardLayout = () => {
           Open Sidebar
         </label>
         <div className="p-4 bg-white rounded-lg shadow-md min-h-screen">
-          <Outlet /> 
+          <Outlet />
         </div>
       </div>
 

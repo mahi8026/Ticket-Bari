@@ -27,32 +27,32 @@ import ManageBookings from "../Pages/Dashboard/Vendor/ManageBookings";
 import TransactionHistory from "../Pages/Dashboard/User/TransactionHistory";
 import AddTicket from "../Pages/Dashboard/Vendor/AddTicket";
 
-import useRole from "../hooks/useRole"; // Assuming this is the correct path to your custom hook
+import useRole from "../hooks/useRole"; 
 import { Navigate } from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage";
 import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
 import AdvertiseTickets from "../Pages/Dashboard/Admin/AdvertiseTickets";
+import VendorProfile from "../Pages/Dashboard/Vendor/VendorProfile";
+import VendorOverview from "../Pages/Dashboard/Vendor/VendorOverview";
 
 const DefaultDashboardRoute = () => {
-  const { role, isRoleLoading } = useRole();
+  const { role, isLoading } = useRole();
 
-  if (isRoleLoading) {
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center min-h-screen">
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
 
-  // Redirect based on the confirmed role
   if (role === "admin") {
-    return <Navigate to="/dashboard/manage-users" replace />;
+    return <Navigate to="/dashboard/admin-profile" replace />;
   }
   if (role === "vendor") {
-    return <Navigate to="/dashboard/add-ticket" replace />;
+    return <Navigate to="/dashboard/vendor-overview" replace />;
   }
 
-  // Default redirect for regular users
   return <Navigate to="/dashboard/profile" replace />;
 };
 
@@ -84,7 +84,6 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-
       {
         index: true,
         element: <DefaultDashboardRoute />,
@@ -94,9 +93,21 @@ export const router = createBrowserRouter([
         path: "my-bookings",
         element: <MyBookings />,
       },
-      
+
+      {
+        path: "profile",
+        element: <UserProfile></UserProfile>,
+      },
 
       // --- Vendor Routes ---
+      {
+        path: "vendor-profile",
+        element: (
+          <VendorRoute>
+            <VendorProfile></VendorProfile>
+          </VendorRoute>
+        ),
+      },
       {
         path: "add-ticket",
         element: (
@@ -125,11 +136,19 @@ export const router = createBrowserRouter([
         path: "manage-tickets",
         element: <ManageTickets></ManageTickets>,
       },
+      {
+        path: "vendor-overview",
+        element: (
+          <VendorRoute>
+            <VendorOverview></VendorOverview>
+          </VendorRoute>
+        ),
+      },
 
       // --- Admin Routes ---
 
       {
-        path: "profile",
+        path: "admin-profile",
         element: (
           <AdminRoute>
             <AdminHome></AdminHome>

@@ -120,6 +120,8 @@ const MainLayout = () => {
     const { loading: authLoading } = useAuth();
     const { isRoleLoading } = useRole(); 
 
+    console.log("Auth Loading:", authLoading, "Role Loading:", isRoleLoading);
+
     if (authLoading || isRoleLoading) {
         return <LoadingSpinner />;
     }
