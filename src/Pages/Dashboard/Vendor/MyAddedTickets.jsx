@@ -86,7 +86,7 @@ const MyAddedTickets = () => {
                 <td>{ticket.title}</td>
                 <td>{ticket.transportType}</td>
                 <td>${parseFloat(ticket.price).toFixed(2)}</td>
-                <td>{ticket.quantity}</td>
+                <td>{ticket.seatsAvailable}</td>
                 <td>
                   <span
                     className={`badge text-white ${

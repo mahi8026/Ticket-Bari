@@ -1,4 +1,3 @@
-
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../Layout/MainLayout";
@@ -28,6 +27,32 @@ import ManageBookings from "../Pages/Dashboard/Vendor/ManageBookings";
 import TransactionHistory from "../Pages/Dashboard/User/TransactionHistory";
 import AddTicket from "../Pages/Dashboard/Vendor/AddTicket";
 
+import useRole from "../hooks/useRole"; // Assuming this is the correct path to your custom hook
+import { Navigate } from "react-router-dom";
+
+const DefaultDashboardRoute = () => {
+  const { role, isRoleLoading } = useRole();
+
+  if (isRoleLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
+
+  // Redirect based on the confirmed role
+  if (role === "admin") {
+    return <Navigate to="/dashboard/manage-users" replace />;
+  }
+  if (role === "vendor") {
+    return <Navigate to="/dashboard/add-ticket" replace />;
+  }
+
+  // Default redirect for regular users
+  return <Navigate to="/dashboard/profile" replace />;
+};
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -43,7 +68,7 @@ export const router = createBrowserRouter([
           <PrivateRoute>
             <TicketDetails />
           </PrivateRoute>
-        ), 
+        ),
       },
     ],
   },
@@ -55,14 +80,19 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // --- User Routes 
+
+      {
+        index: true,
+        element: <DefaultDashboardRoute />,
+      },
+      // --- User Routes
       {
         path: "my-bookings",
         element: <MyBookings />,
       },
       {
         path: "profile",
-        element: <UserProfile />, 
+        element: <UserProfile />,
       },
 
       // --- Vendor Routes ---
@@ -110,7 +140,7 @@ export const router = createBrowserRouter([
           <AdminRoute>
             <ManageTickets />
           </AdminRoute>
-        ), 
+        ),
       },
       {
         path: "advertise-tickets",

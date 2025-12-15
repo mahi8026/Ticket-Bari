@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 
 const MyBookings = () => {
   const { user, loading: authLoading } = useAuth();
-  const axiosSecure = useAxiosSecure(); 
+  const axiosSecure = useAxiosSecure();
 
   const {
     data: bookings = [],
@@ -19,7 +19,7 @@ const MyBookings = () => {
       const res = await axiosSecure.get(`/bookings?email=${user.email}`);
       return res.data;
     },
-  }); 
+  });
 
   const handleDeleteBooking = (booking) => {
     if (booking.status === "paid") {
@@ -31,7 +31,6 @@ const MyBookings = () => {
       return;
     }
 
-    
     const actionText =
       booking.status === "approved"
         ? "This will cancel your approved reservation."
@@ -47,7 +46,6 @@ const MyBookings = () => {
       confirmButtonText: "Yes, Cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        
         axiosSecure.delete(`/bookings/${booking._id}`).then((res) => {
           if (res.data.deletedCount > 0) {
             refetch();
@@ -56,7 +54,7 @@ const MyBookings = () => {
               text: `Your booking for ${booking.title} has been cancelled.`,
               icon: "success",
               timer: 1500,
-            }); 
+            });
           }
         });
       }
@@ -105,7 +103,7 @@ const MyBookings = () => {
               return (
                 <tr key={booking._id}>
                   <td>{booking.title}</td>
-                  <td>{new Date(booking.date).toLocaleDateString()}</td>{" "}
+                  <td>{new Date(booking.date).toLocaleDateString()}</td>
                   <td>{booking.quantity}</td>
                   <td>${parseFloat(booking.totalPrice).toFixed(2)}</td>
                   <td>
@@ -117,29 +115,26 @@ const MyBookings = () => {
                     {booking.transactionId || "N/A"}
                   </td>
                   <td>
-                    {
-                    
-                      booking.status === "approved" ? (
-                        <Link
-                          to="/dashboard/payment" 
-                          state={{ booking: booking }}
-                          className="btn btn-sm btn-info text-white"
-                        >
-                          Pay Now
-                        </Link>
-                      ) : booking.status !== "paid" ? (
-                        <button
-                          onClick={() => handleDeleteBooking(booking)}
-                          className="btn btn-sm btn-ghost text-error"
-                        >
-                          Cancel
-                        </button>
-                      ) : (
-                        <span className="text-success text-sm font-semibold">
-                          Completed
-                        </span>
-                      )
-                    }
+                    {booking.status === "approved" ? (
+                      <Link
+                        to="/dashboard/payment"
+                        state={{ booking: booking }}
+                        className="btn btn-sm btn-info text-white"
+                      >
+                        Pay Now
+                      </Link>
+                    ) : booking.status !== "paid" ? (
+                      <button
+                        onClick={() => handleDeleteBooking(booking)}
+                        className="btn btn-sm btn-ghost text-error"
+                      >
+                        Cancel
+                      </button>
+                    ) : (
+                      <span className="text-success text-sm font-semibold">
+                        Completed
+                      </span>
+                    )}
                   </td>
                 </tr>
               );

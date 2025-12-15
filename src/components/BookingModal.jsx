@@ -1,3 +1,4 @@
+// src/components/BookingModal.jsx
 
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useContext } from "react";
@@ -5,29 +6,31 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { AuthContext } from "../providers/AuthProvider";
 import React from "react";
+// 🚨 Ensure PaymentForm is created and imported
 import PaymentForm from "./PaymentForm";
 
+// Props received from TicketDetails.jsx
 const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [bookingResult, setBookingResult] = useState(null); 
+  const [loading, setLoading] = useState(false); // State to hold the confirmed booking data, including the MongoDB _id
+  const [bookingResult, setBookingResult] = useState(null); // Calculate maximum available tickets
 
-  const maxQuantity = ticket.quantity; 
+  const maxQuantity = ticket.quantity; // Ensure the ticket price is a number
 
-  const unitPrice = parseFloat(ticket.price);
+  const unitPrice = parseFloat(ticket.price); // Reset modal state when closed
 
   const handleClose = () => {
-    setBookingResult(null);
-    setQuantity(1); 
-    closeModal(); 
-  }; 
+    setBookingResult(null); // Reset booking state
+    setQuantity(1); // Reset quantity
+    closeModal(); // Closes the headless UI modal
+  }; // Function called by PaymentForm after successful server update
 
   const handlePaymentSuccess = () => {
-    refetchTickets(); 
-    handleClose(); 
-  }; 
+    refetchTickets(); // Update available tickets on parent page
+    handleClose(); // Close the modal completely
+  }; // Handle form submission and booking creation
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -46,20 +49,20 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
       userEmail: user?.email,
       userName: user?.displayName,
       bookingDate: new Date(),
-      status: "pending", 
+      status: "pending", // Default status before payment
     };
 
     try {
-      
+      // POST request to your backend to save the booking
       const res = await axiosSecure.post("/bookings", bookingInfo);
 
       if (res.data.insertedId) {
-      
+        // 🛑 CORE CHANGE: Save the booking data and ID, but DO NOT call closeModal() here
         const fullBookingData = {
-          ...bookingInfo, 
-          _id: res.data.insertedId, 
+          ...bookingInfo, // Includes all initial data
+          _id: res.data.insertedId, // The ID of the newly created booking (needed for /bookings/pay/:id)
         };
-        setBookingResult(fullBookingData);
+        setBookingResult(fullBookingData); // Triggers conditional rendering to show PaymentForm
 
         Swal.fire({
           title: "Booking Saved!",
@@ -69,9 +72,9 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
           icon: "success",
           confirmButtonText: "OK",
           timer: 3000,
-        }); 
+        }); // refetchTickets(); // OPTIONAL: Could refetch here, but usually waits until payment // closeModal(); // 🛑 REMOVED THIS LINE TO ALLOW PAYMENT FORM TO DISPLAY
       } else if (res.data.message) {
-       
+        // Handle server-side errors like quantity exceeded
         Swal.fire("Error", res.data.message, "error");
       }
     } catch (error) {
@@ -103,13 +106,13 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
                 </Dialog.Title>
 
                 {bookingResult ? (
-                
+                  // --- STEP 2: SHOW PAYMENT FORM ---
                   <PaymentForm
                     bookingDetails={bookingResult}
                     handlePaymentSuccess={handlePaymentSuccess}
                   />
                 ) : (
-                
+                  // --- STEP 1: SHOW INITIAL BOOKING FORM ---
                   <form onSubmit={handleBooking} className="mt-4 space-y-4">
                     <p>Ticket Price (per unit): **${unitPrice.toFixed(2)}**</p>
                     <p className="text-sm text-gray-500">
@@ -167,7 +170,7 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
                         {loading ? (
                           <span className="loading loading-spinner"></span>
                         ) : (
-                          "Proceed to Payment"
+                          "Proceed to Payment" // Text changed for clarity
                         )}
                       </button>
                     </div>
