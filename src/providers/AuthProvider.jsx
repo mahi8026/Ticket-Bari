@@ -18,13 +18,9 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const backendBaseURL = "http://localhost:5000";
-
-  // 🔹 Register / Sync user with backend (ONLY ONCE)
+  const backendBaseURL = "https://ticket-bari-server-murex.vercel.app";
   const registerUserOnBackend = async (firebaseUser) => {
     if (!firebaseUser?.email) return;
-
     const userInfo = {
       name: firebaseUser.displayName || "New User",
       email: firebaseUser.email,
@@ -44,19 +40,16 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Email/Password Signup
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // 🔹 Email/Password Login
   const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // 🔹 Google Login
   const googleSignIn = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
@@ -69,7 +62,6 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  // 🔹 Auth State Observer (SINGLE SOURCE OF TRUTH)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -103,9 +95,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 

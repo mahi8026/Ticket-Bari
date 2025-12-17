@@ -14,7 +14,6 @@ const getTransportIcon = (type) => {
     return <FaTags className="text-xl text-gray-500" />;
   }
 
- 
   switch (type.toLowerCase()) {
     case "bus":
       return <FaBus className="text-xl text-indigo-600" />;
@@ -30,14 +29,13 @@ const getTransportIcon = (type) => {
 };
 
 const TicketCard = ({ ticket }) => {
-  
   const {
     _id,
     title,
     price,
     quantity,
-    transportType = "", 
-    image,
+    ticketType: transportType = "",
+    imageUrl: image,
     from,
     to,
     departureDate,
@@ -49,7 +47,7 @@ const TicketCard = ({ ticket }) => {
       <figure>
         <img src={image} alt={title} className="w-full object-cover" />
       </figure>
-      <div className="card-body p-4 bg-black bg-opacity-40 text-white rounded-xl">
+      <div className="card-body p-4  bg-opacity-40 text-white rounded-xl">
         <div className="flex justify-between items-start">
           <h2 className="card-title text-2xl font-bold">{title}</h2>
           {getTransportIcon(transportType)}
@@ -58,7 +56,7 @@ const TicketCard = ({ ticket }) => {
         <div className="flex flex-col gap-1 mt-2">
           {from && to && (
             <p className="text-sm">
-              Route: **{from}** → **{to}**
+              Route: {from} → {to}
             </p>
           )}
           <p className="text-lg font-semibold flex items-center">
@@ -84,7 +82,7 @@ const TicketCard = ({ ticket }) => {
         </div>
 
         <div className="card-actions justify-end mt-4">
-          <Link to={`/ticket/${_id}`} className="btn btn-primary btn-sm">
+          <Link to={`/ticket/${_id}`} className="btn btn-primary text-black btn-sm">
             See Details
           </Link>
         </div>

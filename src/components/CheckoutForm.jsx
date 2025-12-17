@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import useAxiosSecure from "../hooks/useAxiosSecure";

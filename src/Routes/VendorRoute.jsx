@@ -3,6 +3,8 @@ import { AuthContext } from "../providers/AuthProvider";
 import { Navigate, useLocation } from "react-router-dom";
 import useRole from "../hooks/useRole";
 import React from 'react';
+
+
 const VendorRoute = ({ children }) => {
     const { user, loading } = useContext(AuthContext);
     const { role, isLoading: isRoleLoading } = useRole();

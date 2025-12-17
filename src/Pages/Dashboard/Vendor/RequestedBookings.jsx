@@ -1,4 +1,4 @@
-// src/components/RequestedBookings.jsx (FULL CODE)
+import React from "react";
 
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -18,15 +18,13 @@ const RequestedBookings = () => {
     queryKey: ["vendorBookings", user?.email],
     enabled: !authLoading && !!user?.email,
     queryFn: async () => {
-      // Endpoint returns ALL bookings for the vendor's tickets
       const res = await axiosSecure.get(`/bookings/vendor?email=${user.email}`);
       return res.data;
     },
   });
 
   const handleUpdateStatus = (booking, newStatus) => {
-    // Check if the booking has a valid transactionId to approve a paid booking,
-    // or if the status is currently 'pending' for approval/rejection.
+   
     if (newStatus === "approved" && booking.status !== "pending") {
       Swal.fire(
         "Action Blocked",
@@ -68,10 +66,8 @@ const RequestedBookings = () => {
     );
   }
 
-  // 💡 Filter bookings to only show 'pending' requests as the title suggests.
   const pendingBookings = bookings.filter((b) => b.status === "pending");
 
-  // Determine which list to render based on the component's purpose
   const bookingsToDisplay = pendingBookings;
 
   return (
@@ -98,12 +94,10 @@ const RequestedBookings = () => {
             {bookingsToDisplay.map((booking, index) => (
               <tr key={booking._id}>
                 <th>{index + 1}</th>
-                {/* 💡 Use the 'title' field correctly aliased in the backend aggregation */}
                 <td>{booking.title}</td>
                 <td>{booking.userEmail}</td>
                 <td>{booking.quantity}</td>
                 <td>${parseFloat(booking.totalPrice).toFixed(2)}</td>
-                {/* 💡 FIX: Use booking.bookingDate, the field provided by the backend */}
                 <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                 <td>
                   <span
@@ -119,7 +113,6 @@ const RequestedBookings = () => {
                   </span>
                 </td>
                 <td className="flex gap-2">
-                  {/* Actions only visible for pending bookings */}
                   {booking.status === "pending" && (
                     <>
                       <button
@@ -147,7 +140,6 @@ const RequestedBookings = () => {
       </div>
       {bookingsToDisplay.length === 0 && (
         <p className="text-center text-xl mt-10 text-gray-500">
-          {/* Display message based on filtered list */}
           No pending booking requests found for your tickets.
         </p>
       )}

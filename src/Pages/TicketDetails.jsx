@@ -14,7 +14,7 @@ import {
   FaTags,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -29,12 +29,12 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
 };
 
 const TicketDetails = () => {
+  const axiosSecure = useAxiosSecure();
   const { id } = useParams();
   const { user, loading } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTime] = useState(() => Date.now());
 
-  // Fetch single ticket data
   const {
     data: ticket = {},
     isLoading,
@@ -42,7 +42,7 @@ const TicketDetails = () => {
   } = useQuery({
     queryKey: ["ticketDetails", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/tickets/${id}`);
+      const res = await axiosSecure.get(`/tickets/${id}`);
       return res.data;
     },
   });
@@ -56,7 +56,6 @@ const TicketDetails = () => {
   }
 
   if (!ticket || !ticket._id) {
-    // Handle case where ticket is not found or not approved
     return (
       <div className="text-center p-20 text-error">
         404 | Ticket Not Found or Unauthorized Access.
@@ -64,7 +63,6 @@ const TicketDetails = () => {
     );
   }
 
-  // Logic for button disabling
   const departureTime = new Date(ticket.departureDate).getTime();
   const hasDeparted = departureTime < currentTime;
   const isSoldOut = ticket.quantity <= 0;
@@ -75,7 +73,7 @@ const TicketDetails = () => {
       <div className="card lg:card-side bg-base-100 shadow-xl border">
         <figure className="lg:w-1/3 min-h-60">
           <img
-            src={ticket.image}
+            src={ticket.imageUrl}
             alt={ticket.title}
             className="w-full h-full object-cover"
           />
@@ -88,19 +86,19 @@ const TicketDetails = () => {
 
           <div className="my-4 space-y-2">
             <p className="flex items-center text-lg">
-              <FaMapMarkerAlt className="mr-2 text-warning" /> **Route:**{" "}
-              {ticket.from} → {ticket.to}
+              <FaMapMarkerAlt className="mr-2 text-warning" />
+              Route:** {ticket.from} → {ticket.to}
             </p>
             <p className="flex items-center text-lg">
-              <FaBus className="mr-2 text-info" /> **Transport Type:**{" "}
-              {ticket.transportType}
+              <FaBus className="mr-2 text-info" /> Transport Type:**{" "}
+              {ticket.ticketType}
             </p>
             <p className="flex items-center text-xl font-bold text-success">
-              <FaDollarSign className="mr-2" /> **Price (per unit):** $
+              <FaDollarSign className="mr-2" /> Price (per unit):$
               {ticket.price}
             </p>
             <p className="flex items-center text-md">
-              **Available Seats:**{" "}
+              Available Seats:{" "}
               <span
                 className={`ml-2 font-bold ${
                   isSoldOut ? "text-red-500" : "text-green-500"

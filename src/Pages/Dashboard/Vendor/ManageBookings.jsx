@@ -1,7 +1,10 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+
+
 
 const ManageBookings = () => {
   const { user, loading: authLoading } = useAuth();

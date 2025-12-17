@@ -1,10 +1,9 @@
-// src/pages/ErrorPage.jsx
 import React from "react";
 import { Link, useRouteError } from "react-router-dom";
 
 const ErrorPage = () => {
   const error = useRouteError();
-  console.error(error); // Log error details for debugging
+  console.error(error); 
 
   return (
     <div
@@ -18,7 +17,6 @@ const ErrorPage = () => {
         not exist.
       </p>
 
-      {/* Optional: Show specific error if routed via loader/action */}
       <p className="text-sm text-gray-500 italic mb-6">
         {error.statusText || error.message}
       </p>

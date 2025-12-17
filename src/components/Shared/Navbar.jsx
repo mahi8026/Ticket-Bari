@@ -9,12 +9,11 @@ import {
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
-// Adjust paths as necessary based on your file structure
 import useTheme from "../../hooks/useTheme";
 import { FiSun, FiMoon } from "react-icons/fi";
 import useAuth from "../../hooks/useAuth";
 import useRole from "../../hooks/useRole";
-import { FaBus } from "react-icons/fa"; // Added FaBus for the logo
+import { FaBus } from "react-icons/fa"; 
 
 const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
@@ -32,7 +31,7 @@ const ThemeToggle = () => {
     </label>
   );
 };
-// --- End ThemeToggle Component Definition ---
+
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
@@ -63,19 +62,19 @@ const Navbar = () => {
     <>
       <li>
         <Link to="/" className={isActive("/")}>
-          <FaHome className="mr-1" /> Home
+          <FaHome className="mr-1 font-semibold" /> Home
         </Link>
       </li>
       {user && (
         <>
           <li>
             <Link to="/tickets" className={isActive("/tickets")}>
-              <FaTicketAlt className="mr-1" /> All Tickets
+              <FaTicketAlt className="mr-1 font-semibold" /> All Tickets
             </Link>
           </li>
           <li>
             <Link to={dashboardPath} className={isActive(dashboardPath)}>
-              <FaTachometerAlt className="mr-1" /> Dashboard
+              <FaTachometerAlt className="mr-1 font-semibold" /> Dashboard
             </Link>
           </li>
         </>

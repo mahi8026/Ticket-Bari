@@ -13,7 +13,7 @@ import React from "react";
 import { FaBus } from "react-icons/fa6";
 
 const DashboardLayout = () => {
-  const { user, logOut } = useContext(AuthContext);
+  const { logOut } = useContext(AuthContext);
   const { role, isLoading } = useRole();
 
   let sidebarItems;
@@ -53,7 +53,7 @@ const DashboardLayout = () => {
         </li>
         <li>
           <Link to="vendor-profile">
-          <FaUser /> Vendor Profile 
+            <FaUser /> Vendor Profile
           </Link>
         </li>
         <li>

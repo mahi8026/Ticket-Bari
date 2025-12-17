@@ -16,16 +16,16 @@ const Navbar = () => {
   const navItems = (
     <>
       <li>
-        <Link to="/">Home</Link>
+        <Link className="font-semibold" to="/">Home</Link>
       </li>
       {user && (
         <li>
-          <Link to="/tickets">All Tickets</Link>
+          <Link className="font-semibold" to="/tickets">All Tickets</Link>
         </li>
       )}
       {user && (
         <li>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link className="font-semibold" to="/dashboard">Dashboard</Link>
         </li>
       )}
     </>

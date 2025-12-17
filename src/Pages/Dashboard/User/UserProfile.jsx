@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "https://ticket-bari-server-murex.vercel.app";
 
 const UserProfile = () => {
   const { currentUser, loading: authLoading } = useAuth();
@@ -40,7 +40,6 @@ const UserProfile = () => {
   });
   if (authLoading || profileLoading) {
     return (
-     
       <div className="flex justify-center items-center h-48 bg-white shadow-lg rounded-xl mt-10 max-w-4xl mx-auto">
         <FaSpinner className="animate-spin text-indigo-500 text-3xl mr-3" />
         <p className="text-xl text-gray-600">Loading User Profile...</p>
@@ -50,7 +49,6 @@ const UserProfile = () => {
 
   if (error) {
     return (
-   
       <div className="max-w-4xl mx-auto p-6 bg-red-50 border border-red-300 shadow-md rounded-xl mt-10">
         <h3 className="text-2xl font-bold text-red-700 flex items-center">
           <FaShieldAlt className="mr-3" /> Error Loading Profile
@@ -86,7 +84,6 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white shadow-2xl rounded-2xl mt-12 transform hover:shadow-indigo-300 transition duration-300">
- 
       <div className="flex items-center space-x-5 mb-8 border-b pb-4">
         {photo ? (
           <img
@@ -107,7 +104,6 @@ const UserProfile = () => {
         </div>
       </div>
 
-      
       <div className="space-y-6">
         {name && (
           <div className="p-5 border border-gray-200 rounded-lg bg-gray-50 flex items-center shadow-sm">
@@ -148,7 +144,6 @@ const UserProfile = () => {
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-         
           <Link
             to="/dashboard/transaction-history"
             className="flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg transition duration-150 shadow-md"
@@ -160,7 +155,6 @@ const UserProfile = () => {
             &rarr;
           </Link>
 
-          
           <Link
             to="/dashboard/edit-profile"
             className="flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition duration-150 shadow-md"

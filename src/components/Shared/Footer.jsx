@@ -125,9 +125,7 @@ const Footer = () => {
             <div className="bg-white px-3 py-2 rounded-lg shadow-sm font-bold text-red-600 text-sm">
               MasterCard
             </div>
-            <div className="bg-white px-3 py-2 rounded-lg shadow-sm font-bold text-pink-600 text-sm">
-              bKash
-            </div>
+            
           </div>
         </nav>
       </footer>

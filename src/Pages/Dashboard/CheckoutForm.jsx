@@ -30,8 +30,6 @@ const CheckoutForm = ({ booking, refetchBookings, closeModal }) => {
             setClientLoading(false);
             return;
         }
-
-        // 1. Create Payment Method (Client-Side)
         const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
             type: 'card',
             card,
@@ -44,10 +42,8 @@ const CheckoutForm = ({ booking, refetchBookings, closeModal }) => {
             return;
         }
 
-        // 2. Confirm Card Payment using the client secret (Client-Side)
-        // The clientSecret is passed via the Elements component in MyBookings.jsx
         const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(
-            booking.clientSecret, // This needs to be correctly passed down from MyBookings
+            booking.clientSecret, 
             {
                 payment_method: {
                     card: card,
@@ -65,7 +61,6 @@ const CheckoutForm = ({ booking, refetchBookings, closeModal }) => {
         } else if (paymentIntent.status === 'succeeded') {
             console.log('Payment Succeeded:', paymentIntent);
             
-            // 3. Send Payment Confirmation to Server (Server-Side Finalization)
             const paymentInfo = {
                 transactionId: paymentIntent.id,
                 totalPrice: booking.totalPrice,
@@ -85,7 +80,6 @@ const CheckoutForm = ({ booking, refetchBookings, closeModal }) => {
                     icon: "success"
                 });
                 
-                // Close the modal and refresh the bookings list
                 closeModal();
                 refetchBookings();
             } else {
