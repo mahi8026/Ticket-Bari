@@ -133,10 +133,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "manage-tickets",
-        element: <ManageTickets></ManageTickets>,
-      },
-      {
         path: "vendor-overview",
         element: (
           <VendorRoute>

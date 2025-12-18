@@ -97,7 +97,7 @@ const Home = () => {
       <div className="container mx-auto px-4 py-12 space-y-20">
         <section>
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold mb-2">🔥 Featured Deals</h2>
+            <h2 className="text-3xl text-green-700 font-bold mb-2"> Featured Deals</h2>
             <p className="text-gray-500">
               Hand-picked best prices just for you
             </p>
@@ -117,11 +117,11 @@ const Home = () => {
           )}
         </section>
 
-        {/* 3. LATEST TICKETS */}
+        {/* LATEST TICKETS */}
         <section>
           <div className="flex justify-between items-end mb-8 border-b pb-4">
             <div>
-              <h2 className="text-3xl font-bold">Latest Arrivals</h2>
+              <h2 className="text-3xl text-green-700  font-bold">Latest Arrivals</h2>
               <p className="text-gray-500 text-sm mt-1">
                 Recently added routes and schedules
               </p>
@@ -147,9 +147,9 @@ const Home = () => {
           )}
         </section>
 
-        {/* 4. WHY CHOOSE US */}
+        {/* WHY CHOOSE US */}
         <section className="bg-base-200 rounded-2xl p-10">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-green-700  text-center mb-12">
             Why Choose TicketBari?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">

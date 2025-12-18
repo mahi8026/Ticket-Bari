@@ -66,9 +66,9 @@ const RequestedBookings = () => {
     );
   }
 
-  const pendingBookings = bookings.filter((b) => b.status === "pending");
+  
 
-  const bookingsToDisplay = pendingBookings;
+  const bookingsToDisplay = bookings;
 
   return (
     <div className="p-8">

@@ -1,4 +1,3 @@
-
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useContext } from "react";
 import Swal from "sweetalert2";
@@ -11,34 +10,35 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false); 
-  const [bookingResult, setBookingResult] = useState(null); 
+  const [loading, setLoading] = useState(false);
+  const [bookingResult, setBookingResult] = useState(null);
 
-  const maxQuantity = ticket.quantity;
+  const maxQuantity = parseInt(ticket.seatsAvailable) || 0;
 
   const unitPrice = parseFloat(ticket.price);
 
   const handleClose = () => {
-    setBookingResult(null); 
-    setQuantity(1); 
-    closeModal(); 
+    setBookingResult(null);
+    setQuantity(1);
+    closeModal();
   };
 
   const handlePaymentSuccess = () => {
-    refetchTickets(); 
-    handleClose(); 
+    refetchTickets();
+    handleClose();
   };
 
   const handleBooking = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const totalPrice = unitPrice * quantity;
+    const totalPrice = parseFloat(ticket.price || 0) * parseInt(quantity || 1);
 
     const bookingInfo = {
       ticketId: ticket._id,
       ticketTitle: ticket.title,
-      transportType: ticket.transportType,
+      transportType:
+        ticket.ticketType || ticket.transportType || "Not Specified",
       unitPrice: unitPrice,
       quantity: quantity,
       totalPrice: totalPrice,
@@ -55,9 +55,9 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
       if (res.data.insertedId) {
         const fullBookingData = {
           ...bookingInfo,
-          _id: res.data.insertedId, 
+          _id: res.data.insertedId,
         };
-        setBookingResult(fullBookingData); 
+        setBookingResult(fullBookingData);
 
         Swal.fire({
           title: "Booking Saved!",
@@ -67,7 +67,7 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
           icon: "success",
           confirmButtonText: "OK",
           timer: 3000,
-        }); // refetchTickets(); // OPTIONAL: Could refetch here, but usually waits until payment // closeModal(); // 🛑 REMOVED THIS LINE TO ALLOW PAYMENT FORM TO DISPLAY
+        });
       } else if (res.data.message) {
         Swal.fire("Error", res.data.message, "error");
       }
@@ -137,8 +137,9 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
 
                     <div className="bg-gray-100 p-3 rounded-lg">
                       <p className="text-lg font-bold">
+                        Total:{" "}
                         <span className="text-primary">
-                          ${(unitPrice * quantity).toFixed(2)}
+                          ${(unitPrice * (parseInt(quantity) || 1)).toFixed(2)}
                         </span>
                       </p>
                     </div>

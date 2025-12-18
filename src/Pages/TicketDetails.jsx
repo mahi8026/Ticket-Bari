@@ -3,9 +3,8 @@ import { useParams, Navigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import BookingModal from "../components/BookingModal";
-import Countdown from "react-countdown"; // Requires: npm install react-countdown
+import Countdown from "react-countdown"; 
 import {
   FaBus,
   FaClock,
@@ -22,7 +21,7 @@ const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
   } else {
     return (
       <span className="text-lg font-mono text-success">
-        {days}d {hours}h {minutes}m {seconds}s remaining
+        {days}D {hours}h {minutes}m {seconds}s remaining
       </span>
     );
   }
@@ -65,17 +64,17 @@ const TicketDetails = () => {
 
   const departureTime = new Date(ticket.departureDate).getTime();
   const hasDeparted = departureTime < currentTime;
-  const isSoldOut = ticket.quantity <= 0;
+  const isSoldOut = ticket.seatsAvailable <= 0;
   const isBookDisabled = hasDeparted || isSoldOut || !user;
 
   return (
     <div className="container mx-auto p-4">
-      <div className="card lg:card-side bg-base-100 shadow-xl border">
-        <figure className="lg:w-1/3 min-h-60">
+      <div className="card lg:card-side bg-base-100 shadow-xl ">
+        <figure className="lg:w-1/3 min-h-60 overflow-hidden">
           <img
             src={ticket.imageUrl}
             alt={ticket.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover "
           />
         </figure>
 
@@ -87,14 +86,14 @@ const TicketDetails = () => {
           <div className="my-4 space-y-2">
             <p className="flex items-center text-lg">
               <FaMapMarkerAlt className="mr-2 text-warning" />
-              Route:** {ticket.from} → {ticket.to}
+              Route: {ticket.from} → {ticket.to}
             </p>
             <p className="flex items-center text-lg">
-              <FaBus className="mr-2 text-info" /> Transport Type:**{" "}
+              <FaBus className="mr-2 text-info" /> Transport Type:{" "}
               {ticket.ticketType}
             </p>
             <p className="flex items-center text-xl font-bold text-success">
-              <FaDollarSign className="mr-2" /> Price (per unit):$
+              <FaDollarSign className="mr-2" /> Price (per seat):$
               {ticket.price}
             </p>
             <p className="flex items-center text-md">
@@ -104,7 +103,7 @@ const TicketDetails = () => {
                   isSoldOut ? "text-red-500" : "text-green-500"
                 }`}
               >
-                {ticket.quantity}
+                {ticket.seatsAvailable || 0}
               </span>
             </p>
           </div>

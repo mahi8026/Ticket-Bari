@@ -34,6 +34,7 @@ const TicketCard = ({ ticket }) => {
     title,
     price,
     quantity,
+    seatsAvailable,
     ticketType: transportType = "",
     imageUrl: image,
     from,
@@ -41,6 +42,8 @@ const TicketCard = ({ ticket }) => {
     departureDate,
     perks,
   } = ticket;
+
+  const displaySeats = seatsAvailable !== undefined ? seatsAvailable : quantity;
 
   return (
     <div className="card w-full bg-base-100 shadow-xl image-full h-96 transition-transform hover:scale-[1.02] duration-300">
@@ -62,7 +65,7 @@ const TicketCard = ({ ticket }) => {
           <p className="text-lg font-semibold flex items-center">
             <FaDollarSign className="mr-1" /> Price: ${price}
           </p>
-          <p className="text-sm">Available: {quantity} Tickets</p>
+          <p className="text-sm">Available: {displaySeats} Tickets</p>
           {departureDate && (
             <p className="text-xs italic">
               Departs: {new Date(departureDate).toLocaleString()}
@@ -82,7 +85,10 @@ const TicketCard = ({ ticket }) => {
         </div>
 
         <div className="card-actions justify-end mt-4">
-          <Link to={`/ticket/${_id}`} className="btn btn-primary text-black btn-sm">
+          <Link
+            to={`/ticket/${_id}`}
+            className="btn btn-primary text-black btn-sm"
+          >
             See Details
           </Link>
         </div>
