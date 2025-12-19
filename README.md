@@ -1,16 +1,83 @@
-# React + Vite
+**Ticket Bari**
+Ticket Bari is a comprehensive, ticket booking and management platform designed to streamline the connection between travelers, vendors, and administrators.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live URL**
+Frontend:  https://ticket-bari.web.app
 
-Currently, two official plugins are available:
+**Project Purpose**
+The goal of Ticket Bari is to digitize the ticketing ecosystem in Bangladesh. It provides:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**For Users:** A seamless way to search, book, and pay for bus tickets online.
 
-## React Compiler
+**For Vendors:** A dashboard to list bus tickets, manage inventory, and track booking requests.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**For Admins:** A centralized hub to verify tickets, manage user roles, and monitor platform performance.
 
-## Expanding the ESLint configuration
+**Key Features**
+ Multi-Role Authentication
+Secure Login/Register using Firebase Authentication.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Social Login (Google) for quick access.
+
+Role-based redirects (Admin, Vendor, User) upon login.
+
+**Ticket Management**
+Vendors can add new tickets with details like operator name, price, and quantity.
+
+Admins must verify and approve tickets before they appear on the homepage.
+
+Real-time Stock Tracking: Quantities decrease automatically upon successful booking.
+
+**Booking & Payments**
+Integrated Stripe Payment Gateway for secure transactions.
+
+Booking history with payment status (Pending/Paid).
+
+Automatic receipt generation and transaction history.
+
+**Admin & Vendor Dashboards**
+Admin: Manage users (Promote to Vendor/Admin or Ban/Mark Fraud) and toggle homepage advertisements.
+
+Vendor: Overview of earnings, total tickets added, and requested booking management.
+
+**Modern UI/UX**
+Responsive design for Mobile and Desktop using Tailwind CSS and DaisyUI.
+
+Dark/Light mode support.
+
+Interactive notifications with SweetAlert2.
+
+**Technologies & Packages Used**
+Core Frameworks
+React: For building the user interface.
+
+Vite: For a fast development and build environment.
+
+React Router Dom : For dynamic client-side routing.
+
+**Backend & Database**
+Firebase: Authentication and Frontend Hosting.
+
+Axios: For handling secure API requests to the Node/Express backend.
+
+TanStack React Query: For efficient data fetching, caching, and state synchronization.
+
+**UI & Styling**
+Tailwind CSS & DaisyUI: For utility-first styling and themeable components.
+
+React Icons: For intuitive iconography.
+
+Swiper: For modern touch-enabled sliders.
+
+Headless UI: For accessible UI components.
+
+Utilities & Enhancements
+Stripe (@stripe/stripe-js): For handling online payments.
+
+React Hook Form: For performant and flexible form validation.
+
+Recharts: For visualizing data trends in the dashboards.
+
+SweetAlert2: For beautiful, responsive popup messages.
+
+React Countdown: For time-sensitive booking windows.
