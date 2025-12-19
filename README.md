@@ -1,19 +1,19 @@
-**Ticket Bari**
+**Ticket Bari**  <br>
 Ticket Bari is a comprehensive, ticket booking and management platform designed to streamline the connection between travelers, vendors, and administrators.
 
-**Live URL**
+**Live URL**<br>
 Frontend:  https://ticket-bari.web.app
 
-**Project Purpose**
+**Project Purpose**<br>
 The goal of Ticket Bari is to digitize the ticketing ecosystem in Bangladesh. It provides:
 
-**For Users:** A seamless way to search, book, and pay for bus tickets online.
+**For Users:**<br> A seamless way to search, book, and pay for bus tickets online.
 
-**For Vendors:** A dashboard to list bus tickets, manage inventory, and track booking requests.
+**For Vendors:**<br> A dashboard to list bus tickets, manage inventory, and track booking requests.
 
-**For Admins:** A centralized hub to verify tickets, manage user roles, and monitor platform performance.
+**For Admins:**<br> A centralized hub to verify tickets, manage user roles, and monitor platform performance.
 
-**Key Features**
+**Key Features**<br>
  Multi-Role Authentication
 Secure Login/Register using Firebase Authentication.
 
@@ -21,33 +21,33 @@ Social Login (Google) for quick access.
 
 Role-based redirects (Admin, Vendor, User) upon login.
 
-**Ticket Management**
+**Ticket Management**<br>
 Vendors can add new tickets with details like operator name, price, and quantity.
 
 Admins must verify and approve tickets before they appear on the homepage.
 
 Real-time Stock Tracking: Quantities decrease automatically upon successful booking.
 
-**Booking & Payments**
+**Booking & Payments**<br>
 Integrated Stripe Payment Gateway for secure transactions.
 
 Booking history with payment status (Pending/Paid).
 
 Automatic receipt generation and transaction history.
 
-**Admin & Vendor Dashboards**
+**Admin & Vendor Dashboards**<br>
 Admin: Manage users (Promote to Vendor/Admin or Ban/Mark Fraud) and toggle homepage advertisements.
 
 Vendor: Overview of earnings, total tickets added, and requested booking management.
 
-**Modern UI/UX**
+**Modern UI/UX**<br>
 Responsive design for Mobile and Desktop using Tailwind CSS and DaisyUI.
 
 Dark/Light mode support.
 
 Interactive notifications with SweetAlert2.
 
-**Technologies & Packages Used**
+**Technologies & Packages Used**<br>
 Core Frameworks
 React: For building the user interface.
 
@@ -55,14 +55,14 @@ Vite: For a fast development and build environment.
 
 React Router Dom : For dynamic client-side routing.
 
-**Backend & Database**
+**Backend & Database**<br>
 Firebase: Authentication and Frontend Hosting.
 
 Axios: For handling secure API requests to the Node/Express backend.
 
 TanStack React Query: For efficient data fetching, caching, and state synchronization.
 
-**UI & Styling**
+**UI & Styling**<br>
 Tailwind CSS & DaisyUI: For utility-first styling and themeable components.
 
 React Icons: For intuitive iconography.
