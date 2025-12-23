@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
 
-const API_BASE_URL = "https://ticket-bari-server-pi.vercel.app/";
+const API_BASE_URL = "https://ticket-bari-server-pi.vercel.app";
 
 const UserProfile = () => {
   const { currentUser, loading: authLoading } = useAuth();

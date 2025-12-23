@@ -45,7 +45,7 @@ const Home = () => {
     queryKey: ["advertisedTickets"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://ticket-bari-server-pi.vercel.app//tickets/advertised"
+        "https://ticket-bari-server-pi.vercel.app/tickets/advertised"
       );
       return res.data;
     },
@@ -55,7 +55,7 @@ const Home = () => {
     queryKey: ["latestTickets"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://ticket-bari-server-pi.vercel.app//tickets/latest"
+        "https://ticket-bari-server-pi.vercel.app/tickets/latest"
       );
       return res.data;
     },
