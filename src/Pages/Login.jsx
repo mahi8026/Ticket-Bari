@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import Swal from "sweetalert2";
@@ -14,19 +14,19 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
   const axiosSecure = useAxiosSecure();
+
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit = async (data) => {
     try {
       await signIn(data.email, data.password);
       Swal.fire("Login Successful!", "You are now signed in.", "success");
-      navigate("/");
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Login Failed",
-        text: error.message || "Invalid email or password.",
-      });
+      navigate(from, { replace: true });
+    }
+    catch (error) {
+      Swal.fire("Error", error.message || "Login failed!", "error");
     }
   };
 
@@ -45,7 +45,7 @@ const Login = () => {
       await axiosSecure.post("/users", userData);
 
       Swal.fire("Success", "Google Sign-in Successful!", "success");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {
       Swal.fire("Error", error.message || "Google Sign-in failed!", "error");
     }

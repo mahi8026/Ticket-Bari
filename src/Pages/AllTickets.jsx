@@ -33,7 +33,7 @@ const AllTickets = () => {
         limit: ITEMS_PER_PAGE,
       };
       const res = await axios.get(
-        "https://ticket-bari-server-murex.vercel.app/tickets",
+        "https://ticket-bari-server-pi.vercel.app//tickets",
         { params }
       );
       return res.data;

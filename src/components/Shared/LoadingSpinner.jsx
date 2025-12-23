@@ -6,7 +6,7 @@ const LoadingSpinner = () => {
     <div className="flex justify-center items-center min-h-screen w-full bg-base-100">
       <span className="loading loading-ring loading-lg text-primary"></span>
       <p className="text-lg font-semibold text-primary ml-4">
-        Loading application data...
+        Loading...
       </p>
     </div>
   );

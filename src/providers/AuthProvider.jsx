@@ -18,7 +18,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const backendBaseURL = "https://ticket-bari-server-murex.vercel.app";
+  const backendBaseURL = "https://ticket-bari-server-pi.vercel.app/";
   const registerUserOnBackend = async (firebaseUser) => {
     if (!firebaseUser?.email) return;
     const userInfo = {

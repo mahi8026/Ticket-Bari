@@ -10,7 +10,7 @@ const TicketCardMini = ({ ticket }) => (
     <figure className="h-48 overflow-hidden">
       <img
         src={
-          ticket.imageUrl || 
+          ticket.imageUrl ||
           "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1000&auto=format&fit=crop"
         }
         alt={ticket.title}
@@ -45,7 +45,7 @@ const Home = () => {
     queryKey: ["advertisedTickets"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://ticket-bari-server-murex.vercel.app/tickets/advertised"
+        "https://ticket-bari-server-pi.vercel.app//tickets/advertised"
       );
       return res.data;
     },
@@ -55,7 +55,7 @@ const Home = () => {
     queryKey: ["latestTickets"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://ticket-bari-server-murex.vercel.app/tickets/latest"
+        "https://ticket-bari-server-pi.vercel.app//tickets/latest"
       );
       return res.data;
     },
@@ -67,11 +67,10 @@ const Home = () => {
         className="hero rounded-xl min-h-[500px]"
         style={{
           backgroundImage: `url("https://i.ibb.co.com/8DrGKxBN/hero-illustration-16-07-2025.png")`,
-           backgroundSize: "cover",
-         
+          backgroundSize: "cover",
+
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          
         }}
       >
         <div className="hero-overlay bg-opacity-60  rounded-xl "></div>
@@ -97,7 +96,10 @@ const Home = () => {
       <div className="container mx-auto px-4 py-12 space-y-20">
         <section>
           <div className="text-center mb-10">
-            <h2 className="text-3xl text-green-700 font-bold mb-2"> Featured Deals</h2>
+            <h2 className="text-3xl text-green-700 font-bold mb-2">
+              {" "}
+              Featured Deals
+            </h2>
             <p className="text-gray-500">
               Hand-picked best prices just for you
             </p>
@@ -121,7 +123,9 @@ const Home = () => {
         <section>
           <div className="flex justify-between items-end mb-8 border-b pb-4">
             <div>
-              <h2 className="text-3xl text-green-700  font-bold">Latest Arrivals</h2>
+              <h2 className="text-3xl text-green-700  font-bold">
+                Latest Arrivals
+              </h2>
               <p className="text-gray-500 text-sm mt-1">
                 Recently added routes and schedules
               </p>
@@ -154,7 +158,10 @@ const Home = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="p-6 bg-white rounded-xl shadow-sm">
-              <div className="text-4xl ml-32 mb-4"> <MdOutlineSecurity /> </div>
+              <div className="text-4xl ml-32 mb-4">
+                {" "}
+                <MdOutlineSecurity />{" "}
+              </div>
               <h3 className="font-bold text-xl mb-2">Secure Booking</h3>
               <p className="text-gray-500">
                 We prioritize your data privacy and transaction security with
@@ -162,7 +169,10 @@ const Home = () => {
               </p>
             </div>
             <div className="p-6 bg-white rounded-xl shadow-sm">
-              <div className="text-4xl ml-32 mb-4"> <FcFlashOn /> </div>
+              <div className="text-4xl ml-32 mb-4">
+                {" "}
+                <FcFlashOn />{" "}
+              </div>
               <h3 className="font-bold text-xl mb-2">Fast & Easy</h3>
               <p className="text-gray-500">
                 Book your tickets in just a few clicks. No waiting in lines, no
