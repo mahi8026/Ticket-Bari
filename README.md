@@ -2,7 +2,7 @@
 Ticket Bari is a comprehensive, ticket booking and management platform designed to streamline the connection between travelers, vendors, and administrators.
 
 **Live URL**<br>
-Frontend: https://ticket-bari.web.app
+Frontend:  https://ticket-bari.web.app
 
 **Project Purpose**<br>
 The goal of Ticket Bari is to digitize the ticketing ecosystem in Bangladesh. It provides:

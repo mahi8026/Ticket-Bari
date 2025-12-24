@@ -4,9 +4,8 @@ import useAuth from "./useAuth";
 import { useEffect } from "react";
 
 const axiosSecure = axios.create({
-  backendBaseURL: "https://ticket-bari-server-pi.vercel.app",
+  baseURL: "https://ticket-bari-server-pi.vercel.app",
 });
-//backendBaseURL
 const useAxiosSecure = () => {
   const navigate = useNavigate();
   const { logOut } = useAuth();
