@@ -1,10 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
+import {
+  FaTicketAlt,
+  FaCheck,
+  FaTimes,
+  FaEye,
+  FaFilter,
+  FaSearch,
+  FaSort,
+  FaChartBar,
+  FaExclamationTriangle,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 
 const ManageTickets = () => {
   const axiosSecure = useAxiosSecure();
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("title");
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  const rowVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.3,
+      },
+    },
+    exit: {
+      opacity: 0,
+      x: 20,
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
 
   const {
     data: tickets = [],
@@ -18,7 +78,6 @@ const ManageTickets = () => {
     },
   });
 
-  
   const handleVerification = async (ticket, newStatus) => {
     const actionVerb = newStatus === "approved" ? "Approve" : "Reject";
 
@@ -59,7 +118,16 @@ const ManageTickets = () => {
   if (isLoading) {
     return (
       <div className="text-center p-10">
-        <span className="loading loading-spinner loading-lg"></span>
+        <div class="spinner">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     );
   }
@@ -96,7 +164,7 @@ const ManageTickets = () => {
                   ? "badge-success"
                   : ticket.verificationStatus === "rejected"
                   ? "badge-error"
-                  : "badge-warning"; 
+                  : "badge-warning";
 
               return (
                 <tr key={ticket._id} className={isPending ? "bg-amber-50" : ""}>

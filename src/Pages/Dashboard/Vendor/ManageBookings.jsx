@@ -1,10 +1,19 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
-
-
+import {
+  FaCheck,
+  FaTimes,
+  FaEye,
+  FaCalendarAlt,
+  FaUsers,
+  FaDollarSign,
+  FaTicketAlt,
+  FaClock,
+} from "react-icons/fa";
 
 const ManageBookings = () => {
   const { user, loading: authLoading } = useAuth();
@@ -16,7 +25,6 @@ const ManageBookings = () => {
     isLoading: bookingsLoading,
   } = useQuery({
     queryKey: ["vendorBookings", user?.email],
-
     enabled: !authLoading && !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/bookings/vendor?email=${user.email}`);
@@ -41,8 +49,8 @@ const ManageBookings = () => {
       text: `Do you want to ${actionVerb} the booking for "${ticketTitle}"?`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: newStatus === "approved" ? "#38a169" : "#e53e3e",
-      cancelButtonColor: "#718096",
+      confirmButtonColor: newStatus === "approved" ? "#00C851" : "#FF4757",
+      cancelButtonColor: "#64748B",
       confirmButtonText: `Yes, ${actionVerb} It!`,
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -73,8 +81,8 @@ const ManageBookings = () => {
 
   if (authLoading || bookingsLoading) {
     return (
-      <div className="text-center p-10">
-        <span className="loading loading-spinner loading-lg"></span>
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="loading-spinner w-12 h-12"></div>
       </div>
     );
   }
@@ -83,108 +91,255 @@ const ManageBookings = () => {
   const allOtherBookings = vendorBookings.filter((b) => b.status !== "pending");
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold mb-6">Vendor Booking Management</h2>
-
-      <h3 className="text-2xl font-semibold mb-4 text-warning-content">
-        Waiting for Approval ({pendingBookings.length})
-      </h3>
-      <BookingTable
-        bookings={pendingBookings}
-        handleStatusUpdate={handleStatusUpdate}
-        isActionable={true}
-      />
-
-      <h3 className="text-2xl font-semibold mb-4 mt-8">
-        Processed Bookings ({allOtherBookings.length})
-      </h3>
-      <BookingTable
-        bookings={allOtherBookings}
-        handleStatusUpdate={handleStatusUpdate}
-        isActionable={false}
-      />
-
-      {vendorBookings.length === 0 && (
-        <p className="text-center text-xl mt-10 text-gray-500">
-          You have no bookings for your tickets yet.
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container-custom section-padding"
+    >
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="mb-8"
+      >
+        <h1 className="heading-2 text-primary-600 dark:text-primary-400 mb-4">
+          Booking Management
+        </h1>
+        <p className="text-neutral-600 dark:text-neutral-400">
+          Manage and approve booking requests for your tickets
         </p>
+      </motion.div>
+
+      {/* Stats Cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="grid-cards-4 mb-8"
+      >
+        <div className="stats-card">
+          <div className="stats-icon">
+            <FaClock className="text-warning-500" />
+          </div>
+          <div className="stats-number">{pendingBookings.length}</div>
+          <div className="stats-label">Pending Approval</div>
+        </div>
+        <div className="stats-card">
+          <div className="stats-icon">
+            <FaCheck className="text-success-500" />
+          </div>
+          <div className="stats-number">
+            {vendorBookings.filter((b) => b.status === "approved").length}
+          </div>
+          <div className="stats-label">Approved</div>
+        </div>
+        <div className="stats-card">
+          <div className="stats-icon">
+            <FaDollarSign className="text-primary-500" />
+          </div>
+          <div className="stats-number">
+            {vendorBookings.filter((b) => b.status === "paid").length}
+          </div>
+          <div className="stats-label">Paid</div>
+        </div>
+        <div className="stats-card">
+          <div className="stats-icon">
+            <FaTicketAlt className="text-secondary-500" />
+          </div>
+          <div className="stats-number">{vendorBookings.length}</div>
+          <div className="stats-label">Total Bookings</div>
+        </div>
+      </motion.div>
+
+      {/* Pending Bookings */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="mb-8"
+      >
+        <h2 className="heading-3 text-warning-600 dark:text-warning-400 mb-6 flex items-center gap-3">
+          <FaClock />
+          Pending Approval ({pendingBookings.length})
+        </h2>
+        <BookingTable
+          bookings={pendingBookings}
+          handleStatusUpdate={handleStatusUpdate}
+          isActionable={true}
+        />
+      </motion.div>
+
+      {/* Processed Bookings */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <h2 className="heading-3 text-neutral-700 dark:text-neutral-300 mb-6 flex items-center gap-3">
+          <FaEye />
+          Processed Bookings ({allOtherBookings.length})
+        </h2>
+        <BookingTable
+          bookings={allOtherBookings}
+          handleStatusUpdate={handleStatusUpdate}
+          isActionable={false}
+        />
+      </motion.div>
+
+      {/* Empty State */}
+      {vendorBookings.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.6 }}
+          className="card-premium p-16 text-center"
+        >
+          <FaTicketAlt className="text-6xl text-neutral-400 mx-auto mb-6" />
+          <h3 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200 mb-4">
+            No Bookings Yet
+          </h3>
+          <p className="text-neutral-600 dark:text-neutral-400">
+            You haven't received any booking requests for your tickets yet.
+          </p>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
 const BookingTable = ({ bookings, handleStatusUpdate, isActionable }) => {
+  if (bookings.length === 0) {
+    return (
+      <div className="card-premium p-8 text-center">
+        <p className="text-neutral-600 dark:text-neutral-400">
+          No bookings in this category
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-x-auto shadow-xl rounded-lg mb-8">
-      <table className="table w-full">
-        <thead className="bg-base-300 text-gray-700">
+    <div className="table-custom">
+      <table className="w-full">
+        <thead className="table-header">
           <tr>
-            <th>#</th>
-            <th>Ticket Title</th>
-            <th>User Email</th>
-            <th>Date</th>
-            <th>Qty</th>
-            <th>Total</th>
-            <th>Status</th>
-            {isActionable && <th>Action</th>}
+            <th className="table-cell">#</th>
+            <th className="table-cell">Ticket</th>
+            <th className="table-cell">Customer</th>
+            <th className="table-cell">Date</th>
+            <th className="table-cell">Qty</th>
+            <th className="table-cell">Total</th>
+            <th className="table-cell">Status</th>
+            {isActionable && <th className="table-cell">Actions</th>}
           </tr>
         </thead>
         <tbody>
           {bookings.map((booking, index) => {
-            const statusColor =
-              booking.status === "paid"
-                ? "badge-success"
-                : booking.status === "approved"
-                ? "badge-info"
-                : booking.status === "rejected"
-                ? "badge-error"
-                : "badge-warning"; // pending
+            const getStatusBadge = (status) => {
+              switch (status) {
+                case "paid":
+                  return "badge-success";
+                case "approved":
+                  return "badge-info";
+                case "rejected":
+                  return "badge-error";
+                default:
+                  return "badge-warning";
+              }
+            };
 
             return (
-              <tr
+              <motion.tr
                 key={booking._id}
-                className={booking.status === "paid" ? "bg-green-50" : ""}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className={`table-row ${
+                  booking.status === "paid"
+                    ? "bg-success-50 dark:bg-success-900/20"
+                    : ""
+                }`}
               >
-                <th>{index + 1}</th>
-                <td>{booking.title}</td>
-                <td>{booking.userEmail}</td>
-                <td>{new Date(booking.date).toLocaleDateString()}</td>
-                <td>{booking.quantity}</td>
-                <td>${parseFloat(booking.totalPrice).toFixed(2)}</td>
-                <td>
-                  <span className={`badge ${statusColor} text-white`}>
+                <td className="table-cell font-semibold">{index + 1}</td>
+                <td className="table-cell">
+                  <div className="font-medium text-neutral-800 dark:text-neutral-200">
+                    {booking.title}
+                  </div>
+                </td>
+                <td className="table-cell">
+                  <div>
+                    <div className="font-medium text-neutral-800 dark:text-neutral-200">
+                      {booking.userName || "N/A"}
+                    </div>
+                    <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                      {booking.userEmail}
+                    </div>
+                  </div>
+                </td>
+                <td className="table-cell">
+                  <div className="flex items-center gap-2">
+                    <FaCalendarAlt className="text-primary-500" />
+                    {new Date(
+                      booking.date || booking.bookingDate
+                    ).toLocaleDateString()}
+                  </div>
+                </td>
+                <td className="table-cell">
+                  <div className="flex items-center gap-2">
+                    <FaUsers className="text-secondary-500" />
+                    {booking.quantity}
+                  </div>
+                </td>
+                <td className="table-cell">
+                  <div className="flex items-center gap-2 font-semibold text-primary-600 dark:text-primary-400">
+                    <FaDollarSign />
+                    {parseFloat(booking.totalPrice).toFixed(2)}
+                  </div>
+                </td>
+                <td className="table-cell">
+                  <span className={`${getStatusBadge(booking.status)}`}>
                     {booking.status.toUpperCase()}
                   </span>
                 </td>
                 {isActionable && (
-                  <td>
-                    <button
-                      onClick={() =>
-                        handleStatusUpdate(
-                          booking._id,
-                          "approved",
-                          booking.title
-                        )
-                      }
-                      className="btn btn-xs btn-success text-white mr-2"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleStatusUpdate(
-                          booking._id,
-                          "rejected",
-                          booking.title
-                        )
-                      }
-                      className="btn btn-xs btn-error text-white"
-                    >
-                      Reject
-                    </button>
+                  <td className="table-cell">
+                    <div className="flex gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() =>
+                          handleStatusUpdate(
+                            booking._id,
+                            "approved",
+                            booking.title
+                          )
+                        }
+                        className="btn-primary-custom text-xs px-3 py-1"
+                      >
+                        <FaCheck className="mr-1" />
+                        Approve
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() =>
+                          handleStatusUpdate(
+                            booking._id,
+                            "rejected",
+                            booking.title
+                          )
+                        }
+                        className="bg-error-500 hover:bg-error-600 text-white px-3 py-1 rounded-lg text-xs font-semibold transition-colors"
+                      >
+                        <FaTimes className="mr-1" />
+                        Reject
+                      </motion.button>
+                    </div>
                   </td>
                 )}
-              </tr>
+              </motion.tr>
             );
           })}
         </tbody>

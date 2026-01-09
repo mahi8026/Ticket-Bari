@@ -2,6 +2,8 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import {
   FaUserCircle,
   FaEnvelope,
@@ -9,14 +11,49 @@ import {
   FaHistory,
   FaSpinner,
   FaIdCard,
+  FaEdit,
+  FaCog,
 } from "react-icons/fa";
 import useAuth from "../../../hooks/useAuth";
-
-const API_BASE_URL = "https://ticket-bari-server-pi.vercel.app";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const UserProfile = () => {
-  const { currentUser, loading: authLoading } = useAuth();
-  const userEmail = currentUser?.email;
+  const { user, loading: authLoading } = useAuth();
+  const userEmail = user?.email;
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  };
 
   const {
     data: userProfile,
@@ -39,26 +76,28 @@ const UserProfile = () => {
     },
   });
   if (authLoading || profileLoading) {
-    return (
-      <div className="flex justify-center items-center h-48 bg-white shadow-lg rounded-xl mt-10 max-w-4xl mx-auto">
-        <FaSpinner className="animate-spin text-indigo-500 text-3xl mr-3" />
-        <p className="text-xl text-gray-600">Loading User Profile...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading User Profile..." />;
   }
 
   if (error) {
+    toast.error("Failed to load user profile. Please try again.");
     return (
-      <div className="max-w-4xl mx-auto p-6 bg-red-50 border border-red-300 shadow-md rounded-xl mt-10">
-        <h3 className="text-2xl font-bold text-red-700 flex items-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-4xl mx-auto p-6 bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-700 shadow-md rounded-xl"
+      >
+        <h3 className="text-2xl font-bold text-red-700 dark:text-red-400 flex items-center">
           <FaShieldAlt className="mr-3" /> Error Loading Profile
         </h3>
-        <p className="text-red-600 mt-2">
+        <p className="text-red-600 dark:text-red-300 mt-2">
           Could not fetch user data. Check server connection or authentication
           status.
         </p>
-        <p className="text-sm italic mt-1">Error: {error.message}</p>
-      </div>
+        <p className="text-sm italic mt-1 text-red-500 dark:text-red-400">
+          Error: {error.message}
+        </p>
+      </motion.div>
     );
   }
 
@@ -83,91 +122,229 @@ const UserProfile = () => {
   const roleStyles = getRoleStyles(role);
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-white shadow-2xl rounded-2xl mt-12 transform hover:shadow-indigo-300 transition duration-300">
-      <div className="flex items-center space-x-5 mb-8 border-b pb-4">
-        {photo ? (
-          <img
-            src={photo}
-            alt={name || "User"}
-            className="w-16 h-16 rounded-full object-cover border-4 border-indigo-200"
-          />
-        ) : (
-          <FaUserCircle className="text-6xl text-indigo-500" />
-        )}
-        <div>
-          <h2 className="text-4xl font-extrabold text-gray-900">
-            {name || "My Account"}
-          </h2>
-          <p className="text-gray-500">
-            Manage your profile and account settings.
-          </p>
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="max-w-4xl mx-auto"
+    >
+      {/* Header Section */}
+      <motion.div
+        variants={cardVariants}
+        className="bg-gradient-to-r from-primary to-secondary text-white rounded-xl p-8 mb-8 shadow-lg"
+      >
+        <div className="flex items-center space-x-6">
+          <motion.div
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            className="relative"
+          >
+            {photo ? (
+              <img
+                src={photo}
+                alt={name || "User"}
+                className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center border-4 border-white">
+                <FaUserCircle className="text-4xl text-white" />
+              </div>
+            )}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center"
+            >
+              <span className="text-xs text-white">✓</span>
+            </motion.div>
+          </motion.div>
+          <div className="flex-1">
+            <motion.h1
+              variants={itemVariants}
+              className="text-3xl font-bold mb-2"
+            >
+              {name || "Welcome to Your Profile"}
+            </motion.h1>
+            <motion.p variants={itemVariants} className="text-white/80 mb-2">
+              {email}
+            </motion.p>
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center space-x-2"
+            >
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-semibold capitalize ${roleStyles.bg} ${roleStyles.text}`}
+              >
+                {roleStyles.icon} {role}
+              </span>
+              <span className="text-white/60 text-sm">Account</span>
+            </motion.div>
+          </div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => toast.info("Profile editing coming soon!")}
+            className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-colors flex items-center space-x-2"
+          >
+            <FaEdit />
+            <span>Edit Profile</span>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="space-y-6">
+      {/* Profile Details */}
+      <motion.div variants={containerVariants} className="space-y-6 mb-8">
         {name && (
-          <div className="p-5 border border-gray-200 rounded-lg bg-gray-50 flex items-center shadow-sm">
-            <FaIdCard className="text-2xl text-gray-500 mr-4" />
-            <div>
-              <p className="text-sm font-medium text-gray-500">Full Name</p>
-              <p className="text-xl font-semibold text-gray-800">{name}</p>
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ scale: 1.02, y: -2 }}
+            className="card-consistent p-6 flex items-center space-x-4"
+          >
+            <motion.div
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+              className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center"
+            >
+              <FaIdCard className="text-2xl text-blue-600 dark:text-blue-400" />
+            </motion.div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Full Name
+              </p>
+              <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+                {name}
+              </p>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div className="p-5 border border-gray-200 rounded-lg bg-gray-50 flex items-center shadow-sm">
-          <FaEnvelope className="text-2xl text-gray-500 mr-4" />
-          <div>
-            <p className="text-sm font-medium text-gray-500">Email Address</p>
-            <p className="text-xl font-semibold text-gray-800">{email}</p>
+        <motion.div
+          variants={cardVariants}
+          whileHover={{ scale: 1.02, y: -2 }}
+          className="card-consistent p-6 flex items-center space-x-4"
+        >
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center"
+          >
+            <FaEnvelope className="text-2xl text-green-600 dark:text-green-400" />
+          </motion.div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Email Address
+            </p>
+            <p className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              {email}
+            </p>
           </div>
-        </div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.8 }}
+            className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium"
+          >
+            Verified
+          </motion.div>
+        </motion.div>
 
-        <div className="p-5 border border-gray-200 rounded-lg bg-gray-50 flex items-center shadow-sm">
-          <FaShieldAlt className={`text-2xl ${roleStyles.text} mr-4`} />
-          <div>
-            <p className="text-sm font-medium text-gray-500">Account Role</p>
+        <motion.div
+          variants={cardVariants}
+          whileHover={{ scale: 1.02, y: -2 }}
+          className="card-consistent p-6 flex items-center space-x-4"
+        >
+          <motion.div
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+            className={`w-12 h-12 ${roleStyles.bg} rounded-full flex items-center justify-center`}
+          >
+            <FaShieldAlt className={`text-2xl ${roleStyles.text}`} />
+          </motion.div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              Account Role
+            </p>
             <div className="flex items-center space-x-2">
               <span
-                className={`px-4 py-1.5 rounded-full text-base font-bold capitalize ${roleStyles.bg} ${roleStyles.text}`}
+                className={`px-4 py-2 rounded-full text-base font-bold capitalize ${roleStyles.bg} ${roleStyles.text}`}
               >
                 {roleStyles.icon} {role}
               </span>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="mt-10 pt-6 border-t border-gray-200">
-        <h3 className="text-2xl font-bold mb-4 text-indigo-700">
+      {/* Quick Actions */}
+      <motion.div variants={cardVariants} className="card-consistent p-8">
+        <motion.h3
+          variants={itemVariants}
+          className="text-2xl font-bold mb-6 text-primary flex items-center"
+        >
+          <FaCog className="mr-3" />
           Quick Actions
-        </h3>
+        </motion.h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Link
-            to="/dashboard/transaction-history"
-            className="flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg transition duration-150 shadow-md"
+        <motion.div
+          variants={containerVariants}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="flex items-center">
-              <FaHistory className="mr-3 text-xl" />
-              <span>View **Transaction History**</span>
-            </div>
-            &rarr;
-          </Link>
+            <Link
+              to="/dashboard/transaction-history"
+              className="block p-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl shadow-lg transition-all duration-300"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <FaHistory className="text-2xl" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold">
+                      Transaction History
+                    </h4>
+                    <p className="text-blue-100 text-sm">
+                      View all transactions
+                    </p>
+                  </div>
+                </div>
+                <span className="text-2xl">→</span>
+              </div>
+            </Link>
+          </motion.div>
 
-          <Link
-            to="/dashboard/edit-profile"
-            className="flex items-center justify-between p-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition duration-150 shadow-md"
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="flex items-center">
-              <FaUserCircle className="mr-3 text-xl" />
-              <span>Edit **Personal Details**</span>
-            </div>
-            &rarr;
-          </Link>
-        </div>
-      </div>
-    </div>
+            <button
+              onClick={() => toast.info("Profile editing feature coming soon!")}
+              className="block w-full p-6 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl shadow-lg transition-all duration-300"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <FaUserCircle className="text-2xl" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="text-lg font-semibold">Edit Profile</h4>
+                    <p className="text-purple-100 text-sm">
+                      Update personal details
+                    </p>
+                  </div>
+                </div>
+                <span className="text-2xl">→</span>
+              </div>
+            </button>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 

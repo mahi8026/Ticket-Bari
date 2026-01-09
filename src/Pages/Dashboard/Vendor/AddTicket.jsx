@@ -12,7 +12,6 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 
-
 const IMAGE_HOSTING_API = `https://api.imgbb.com/1/upload?key=${
   import.meta.env.VITE_image_host
 }`;
@@ -25,7 +24,7 @@ const AddTicket = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm(); 
+  } = useForm();
 
   const getTodayDate = () => {
     const today = new Date();
@@ -34,7 +33,7 @@ const AddTicket = () => {
     const month = String(today.getMonth() + 1).padStart(2, "0");
     const day = String(today.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
-  }; 
+  };
 
   const onSubmit = async (data) => {
     const imageFile = data.image[0];
@@ -45,20 +44,15 @@ const AddTicket = () => {
       formData.append("image", imageFile);
 
       try {
-        const imgUploadRes = await axios.post(
-          IMAGE_HOSTING_API,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const imgUploadRes = await axios.post(IMAGE_HOSTING_API, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         if (imgUploadRes.data.success) {
           imageUrl = imgUploadRes.data.data.display_url;
         } else {
-         
           throw new Error(
             imgUploadRes.data.error?.message || "Image upload failed."
           );
@@ -72,14 +66,14 @@ const AddTicket = () => {
         });
         return;
       }
-    } 
+    }
 
     const newTicket = {
       vendorEmail: user?.email,
       vendorName: user?.displayName,
       dateAdded: new Date(),
       verificationStatus: "pending",
-      isAdvertised: false, 
+      isAdvertised: false,
       title: data.title,
       imageUrl: imageUrl,
       perks: data.perks || [],
@@ -93,7 +87,7 @@ const AddTicket = () => {
       price: parseFloat(data.price),
       seatsAvailable: parseInt(data.seatsAvailable),
       description: data.description || "",
-    }; 
+    };
     try {
       const response = await axiosSecure.post("/tickets", newTicket);
 
@@ -134,34 +128,28 @@ const AddTicket = () => {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">
-                Ticket Title / Route Name*
-              </span>
+            <label className="form-label-custom">
+              Ticket Title / Route Name*
             </label>
 
             <input
               type="text"
               {...register("title", { required: true })}
               placeholder="e.g., Dhaka - Chittagong AC Deluxe"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.title && (
-              <span className="text-red-500 text-sm mt-1">
-                Ticket Title is required
-              </span>
+              <span className="form-error">Ticket Title is required</span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Transport Type*</span>
-            </label>
+            <label className="form-label-custom">Transport Type*</label>
 
             <select
               {...register("ticketType", { required: true })}
-              className="select select-bordered w-full"
+              className="form-input-custom"
             >
               <option value="">Select Transport Type</option>
               <option value="Bus">Bus</option>
@@ -171,99 +159,75 @@ const AddTicket = () => {
             </select>
 
             {errors.ticketType && (
-              <span className="text-red-500 text-sm mt-1">
-                Transport Type is required
-              </span>
+              <span className="form-error">Transport Type is required</span>
             )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Operator Name*</span>
-            </label>
+            <label className="form-label-custom">Operator Name*</label>
 
             <input
               type="text"
               {...register("operatorName", { required: true })}
               placeholder="e.g., Green Line, Biman Bangladesh"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.operatorName && (
-              <span className="text-red-500 text-sm mt-1">
-                Operator Name is required
-              </span>
+              <span className="form-error">Operator Name is required</span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Ticket Image*</span>
-            </label>
+            <label className="form-label-custom">Ticket Image*</label>
 
             <input
               type="file"
               {...register("image", { required: true })}
-              className="file-input file-input-bordered file-input-primary w-full"
+              className="form-input-custom file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
               accept="image/*"
             />
 
             {errors.image && (
-              <span className="text-red-500 text-sm mt-1">
-                Ticket Image is required
-              </span>
+              <span className="form-error">Ticket Image is required</span>
             )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">
-                Departure City/Station*
-              </span>
-            </label>
+            <label className="form-label-custom">Departure City/Station*</label>
 
             <input
               type="text"
               {...register("from", { required: true })}
               placeholder="e.g., Dhaka"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.from && (
-              <span className="text-red-500 text-sm mt-1">
-                Departure location is required
-              </span>
+              <span className="form-error">Departure location is required</span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">
-                Arrival City/Station*
-              </span>
-            </label>
+            <label className="form-label-custom">Arrival City/Station*</label>
 
             <input
               type="text"
               {...register("to", { required: true })}
               placeholder="e.g., Chittagong"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.to && (
-              <span className="text-red-500 text-sm mt-1">
-                Arrival location is required
-              </span>
+              <span className="form-error">Arrival location is required</span>
             )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Departure Date*</span>
-            </label>
+            <label className="form-label-custom">Departure Date*</label>
 
             <input
               type="date"
@@ -275,59 +239,45 @@ const AddTicket = () => {
                 },
               })}
               min={getTodayDate()}
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.departureDate && (
-              <span className="text-red-500 text-sm mt-1">
+              <span className="form-error">
                 {errors.departureDate.message || "Departure date is required"}
               </span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Departure Time*</span>
-            </label>
+            <label className="form-label-custom">Departure Time*</label>
 
             <input
               type="time"
               {...register("departureTime", { required: true })}
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
             {errors.departureTime && (
-              <span className="text-red-500 text-sm mt-1">
-                Departure time is required
-              </span>
+              <span className="form-error">Departure time is required</span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">
-                Estimated Arrival Time*
-              </span>
-            </label>
+            <label className="form-label-custom">Estimated Arrival Time*</label>
             <input
               type="time"
               {...register("arrivalTime", { required: true })}
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.arrivalTime && (
-              <span className="text-red-500 text-sm mt-1">
-                Arrival time is required
-              </span>
+              <span className="form-error">Arrival time is required</span>
             )}
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">
-                Price per Seat (BDT)*
-              </span>
-            </label>
+            <label className="form-label-custom">Price per Seat (BDT)*</label>
             <input
               type="number"
               step="0.01"
@@ -337,20 +287,18 @@ const AddTicket = () => {
                 min: 1,
               })}
               placeholder="e.g., 550"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.price && (
-              <span className="text-red-500 text-sm mt-1">
+              <span className="form-error">
                 Valid Price (BDT 1+) is required
               </span>
             )}
           </div>
 
           <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Seats Available*</span>
-            </label>
+            <label className="form-label-custom">Seats Available*</label>
 
             <input
               type="number"
@@ -360,11 +308,11 @@ const AddTicket = () => {
                 min: 1,
               })}
               placeholder="e.g., 40"
-              className="input input-bordered w-full"
+              className="form-input-custom"
             />
 
             {errors.seatsAvailable && (
-              <span className="text-red-500 text-sm mt-1">
+              <span className="form-error">
                 Seats Available must be at least 1
               </span>
             )}
@@ -372,23 +320,21 @@ const AddTicket = () => {
         </div>
 
         <div className="form-control mb-6">
-          <label className="label">
-            <span className="label-text font-semibold text-lg">
-              Ticket Perks / Features
-            </span>
+          <label className="form-label-custom text-lg">
+            Ticket Perks / Features
           </label>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg border">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-6 bg-surface-light dark:bg-surface-dark rounded-xl border border-neutral-200 dark:border-neutral-700">
             <label className="flex items-center space-x-2 cursor-pointer">
               <input
                 type="checkbox"
                 {...register("perks")}
                 value="AC/Climate Control"
-                className="checkbox checkbox-primary"
+                className="w-4 h-4 text-primary-600 bg-surface-light dark:bg-surface-dark border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
               />
 
-              <span className="label-text flex items-center gap-1">
-                <FaChair /> AC/Climate Control
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                <FaChair className="text-primary-500" /> AC/Climate Control
               </span>
             </label>
 
@@ -397,11 +343,11 @@ const AddTicket = () => {
                 type="checkbox"
                 {...register("perks")}
                 value="Onboard WiFi"
-                className="checkbox checkbox-primary"
+                className="w-4 h-4 text-primary-600 bg-surface-light dark:bg-surface-dark border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
               />
 
-              <span className="label-text flex items-center gap-1">
-                <FaWifi /> Onboard WiFi
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                <FaWifi className="text-primary-500" /> Onboard WiFi
               </span>
             </label>
 
@@ -410,11 +356,11 @@ const AddTicket = () => {
                 type="checkbox"
                 {...register("perks")}
                 value="Meal/Snacks Provided"
-                className="checkbox checkbox-primary"
+                className="w-4 h-4 text-primary-600 bg-surface-light dark:bg-surface-dark border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
               />
 
-              <span className="label-text flex items-center gap-1">
-                <FaUtensils /> Meal/Snacks
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
+                <FaUtensils className="text-primary-500" /> Meal/Snacks
               </span>
             </label>
 
@@ -423,7 +369,7 @@ const AddTicket = () => {
                 type="checkbox"
                 {...register("perks")}
                 value="Reclining Seats"
-                className="checkbox checkbox-primary"
+                className="w-4 h-4 text-primary-600 bg-surface-light dark:bg-surface-dark border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
               />
 
               <span className="label-text flex items-center gap-1">

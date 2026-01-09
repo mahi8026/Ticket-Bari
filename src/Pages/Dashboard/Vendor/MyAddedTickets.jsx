@@ -57,7 +57,16 @@ const MyAddedTickets = () => {
   if (isLoading)
     return (
       <div className="text-center p-10">
-        <span className="loading loading-spinner loading-lg"></span>
+        <div class="spinner">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
       </div>
     );
 

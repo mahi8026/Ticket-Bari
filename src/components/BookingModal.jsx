@@ -131,7 +131,7 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
                         min="1"
                         max={maxQuantity}
                         required
-                        className="mt-1 input input-bordered w-full"
+                        className="form-input-custom"
                       />
                     </div>
 

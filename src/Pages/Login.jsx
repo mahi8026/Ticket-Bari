@@ -2,8 +2,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { AuthContext } from "../providers/AuthProvider";
-import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Login = () => {
@@ -22,11 +23,10 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       await signIn(data.email, data.password);
-      Swal.fire("Login Successful!", "You are now signed in.", "success");
+      toast.success("Login successful! Welcome back!");
       navigate(from, { replace: true });
-    }
-    catch (error) {
-      Swal.fire("Error", error.message || "Login failed!", "error");
+    } catch (error) {
+      toast.error(error.message || "Login failed! Please try again.");
     }
   };
 
@@ -44,79 +44,198 @@ const Login = () => {
       };
       await axiosSecure.post("/users", userData);
 
-      Swal.fire("Success", "Google Sign-in Successful!", "success");
+      toast.success("Google Sign-in successful! Welcome!");
       navigate(from, { replace: true });
     } catch (error) {
-      Swal.fire("Error", error.message || "Google Sign-in failed!", "error");
+      toast.error(error.message || "Google Sign-in failed! Please try again.");
     }
   };
 
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col lg:flex-row">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login to TicketBari</h1>
-          <p className="py-6">
+    <div className="min-h-screen bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800 flex items-center justify-center p-4">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Left Side - Welcome Content */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-center lg:text-left"
+        >
+          <h1 className="heading-1 text-neutral-800 dark:text-neutral-200 mb-6">
+            Welcome Back to TicketBari
+          </h1>
+          <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8 leading-relaxed">
             Access your dashboard, manage bookings, and find the best tickets
-            for your next journey.
+            for your next journey across Bangladesh.
           </p>
-        </div>
-        <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-          <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Email</span>
-              </label>
-              <input
-                type="email"
-                {...register("email", { required: true })}
-                placeholder="Email"
-                className="input input-bordered"
-              />
-              {errors.email && (
-                <span className="text-red-500 text-xs mt-1">
-                  Email is required
-                </span>
-              )}
+          <div className="hidden lg:block">
+            <div className="grid grid-cols-2 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <motion.div
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    🎫
+                  </motion.div>
+                </div>
+                <h3 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                  Easy Booking
+                </h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  Book tickets in just a few clicks
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <motion.div
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  >
+                    🚌
+                  </motion.div>
+                </div>
+                <h3 className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                  Multiple Routes
+                </h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                  Travel anywhere in Bangladesh
+                </p>
+              </div>
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
-              <input
-                type="password"
-                {...register("password", { required: true })}
-                placeholder="Password"
-                className="input input-bordered"
-              />
-              {errors.password && (
-                <span className="text-red-500 text-xs mt-1">
-                  Password is required
-                </span>
-              )}
-              <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
-              </label>
-            </div>
-            <div className="form-control mt-6">
-              <button type="submit" className="btn btn-primary">
-                Login
-              </button>
-            </div>
-          </form>
+          </div>
+        </motion.div>
 
-          <div className="px-8 pb-4 text-center">
-            <p className="mb-2">Or Login with</p>
-            <button
+        {/* Right Side - Login Form */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="w-full max-w-md mx-auto"
+        >
+          <div className="card-premium p-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  🔐
+                </motion.div>
+              </div>
+              <h2 className="heading-3 text-neutral-800 dark:text-neutral-200 mb-2">
+                Sign In
+              </h2>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Welcome back! Please sign in to your account
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email Field */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <label className="form-label-custom">Email Address</label>
+                <motion.input
+                  whileFocus={{ scale: 1.02 }}
+                  type="email"
+                  {...register("email", { required: "Email is required" })}
+                  placeholder="Enter your email"
+                  className={`form-input-custom ${
+                    errors.email ? "border-error-500" : ""
+                  }`}
+                />
+                {errors.email && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="form-error"
+                  >
+                    {errors.email.message}
+                  </motion.span>
+                )}
+              </motion.div>
+
+              {/* Password Field */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+              >
+                <label className="form-label-custom">Password</label>
+                <motion.input
+                  whileFocus={{ scale: 1.02 }}
+                  type="password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  placeholder="Enter your password"
+                  className={`form-input-custom ${
+                    errors.password ? "border-error-500" : ""
+                  }`}
+                />
+                {errors.password && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="form-error"
+                  >
+                    {errors.password.message}
+                  </motion.span>
+                )}
+                <div className="text-right mt-2">
+                  <a
+                    href="#"
+                    className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+              </motion.div>
+
+              {/* Submit Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8 }}
+              >
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  className="btn-primary-custom w-full text-lg py-3"
+                >
+                  Sign In
+                </motion.button>
+              </motion.div>
+            </form>
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-neutral-300 dark:border-neutral-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white dark:bg-surface-dark text-neutral-500 dark:text-neutral-400">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Google Sign In */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={handleGoogleSignIn}
-              className="btn btn-circle btn-outline"
+              type="button"
+              className="w-full flex items-center justify-center px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl shadow-soft bg-white dark:bg-surface-dark text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors font-medium"
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                className="w-5 h-5 mr-3"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -137,15 +256,23 @@ const Login = () => {
                   fill="#34A853"
                 />
               </svg>
-            </button>
-            <p className="mt-4">
-              Don't have an account?{" "}
-              <Link to="/register" className="text-primary font-bold link">
-                Register
-              </Link>
-            </p>
+              Sign in with Google
+            </motion.button>
+
+            {/* Register Link */}
+            <div className="text-center mt-8">
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Don't have an account?{" "}
+                <Link
+                  to="/register"
+                  className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-semibold transition-colors"
+                >
+                  Sign up here
+                </Link>
+              </p>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

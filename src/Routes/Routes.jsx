@@ -8,14 +8,20 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import AllTickets from "../Pages/AllTickets";
 import TicketDetails from "../Pages/TicketDetails";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import Blog from "../Pages/Blog";
+import Help from "../Pages/Help";
 import MyAddedTickets from "../Pages/Dashboard/Vendor/MyAddedTickets";
-import RequestedBookings from "../Pages/Dashboard/Vendor/RequestedBookings";
 
 import ManageTickets from "../Pages/Dashboard/Admin/ManageTickets";
 
 // User Pages
 import MyBookings from "../Pages/Dashboard/User/MyBookings";
 import UserProfile from "../Pages/Dashboard/User/UserProfile";
+
+// Demo Components
+import AnimationDemo from "../components/Demo/AnimationDemo";
 
 // Guards
 import PrivateRoute from "./PrivateRoute";
@@ -27,7 +33,7 @@ import ManageBookings from "../Pages/Dashboard/Vendor/ManageBookings";
 import TransactionHistory from "../Pages/Dashboard/User/TransactionHistory";
 import AddTicket from "../Pages/Dashboard/Vendor/AddTicket";
 
-import useRole from "../hooks/useRole"; 
+import useRole from "../hooks/useRole";
 import { Navigate } from "react-router-dom";
 import ErrorPage from "../Pages/ErrorPage";
 import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
@@ -66,6 +72,11 @@ export const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "tickets", element: <AllTickets /> },
+      { path: "about", element: <About /> },
+      { path: "contact", element: <Contact /> },
+      { path: "blog", element: <Blog /> },
+      { path: "help", element: <Help /> },
+      { path: "demo", element: <AnimationDemo /> },
       {
         path: "ticket/:id",
         element: (
@@ -125,10 +136,18 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "manage-bookings",
+        element: (
+          <VendorRoute>
+            <ManageBookings />
+          </VendorRoute>
+        ),
+      },
+      {
         path: "requested-bookings",
         element: (
           <VendorRoute>
-            <RequestedBookings />
+            <ManageBookings />
           </VendorRoute>
         ),
       },
