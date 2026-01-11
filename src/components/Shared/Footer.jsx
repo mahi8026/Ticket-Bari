@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import {
   FaBus,
@@ -12,7 +11,6 @@ import {
   FaClock,
   FaShieldAlt,
   FaHeadset,
-  FaCreditCard,
   FaMobile,
 } from "react-icons/fa";
 import { SiStripe, SiPaypal, SiVisa, SiMastercard } from "react-icons/si";
@@ -40,7 +38,7 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://facebook.com/ticketbari"
+                href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary transition-colors"
@@ -49,7 +47,7 @@ const Footer = () => {
                 <FaFacebook className="text-xl" />
               </a>
               <a
-                href="https://twitter.com/ticketbari"
+                href="https://x.com/home"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary transition-colors"
@@ -67,7 +65,7 @@ const Footer = () => {
                 <FaInstagram className="text-xl" />
               </a>
               <a
-                href="https://linkedin.com/company/ticketbari"
+                href="https://www.linkedin.com/in/mahimrahman-dev/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary transition-colors"
@@ -192,24 +190,12 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact & Support */}
+          {/* Contact & Payment Methods */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">
               Contact & Support
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <FaMapMarkerAlt className="text-primary mt-1 flex-shrink-0" />
-                <div>
-                  <p className="text-gray-400 text-sm">
-                    House 123, Road 456
-                    <br />
-                    Dhanmondi, Dhaka 1205
-                    <br />
-                    Bangladesh
-                  </p>
-                </div>
-              </div>
+            <div className="space-y-3 mb-6">
 
               <div className="flex items-center space-x-3">
                 <FaPhone className="text-primary flex-shrink-0" />
@@ -217,7 +203,7 @@ const Footer = () => {
                   href="tel:+8801234567890"
                   className="text-gray-400 hover:text-primary transition-colors"
                 >
-                  +880 123 456 7890
+                  +880 1646886795
                 </a>
               </div>
 
@@ -240,33 +226,36 @@ const Footer = () => {
             </div>
 
             {/* Payment Methods */}
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold text-white mb-3">
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-4">
                 Secure Payments
               </h4>
-              <div className="flex flex-wrap gap-2">
-                <div className="bg-white p-2 rounded shadow-sm">
+              <div className="flex gap-2 flex-wrap">
+                <div className="bg-white p-2 rounded-lg shadow-sm flex items-center justify-center hover:shadow-md transition-shadow">
                   <SiStripe
                     className="text-2xl text-[#635BFF]"
                     title="Stripe"
                   />
                 </div>
-                <div className="bg-white p-2 rounded shadow-sm">
+                <div className="bg-white p-2 rounded-lg shadow-sm flex items-center justify-center hover:shadow-md transition-shadow">
                   <SiPaypal
                     className="text-2xl text-[#0070BA]"
                     title="PayPal"
                   />
                 </div>
-                <div className="bg-white p-2 rounded shadow-sm">
+                <div className="bg-white p-2 rounded-lg shadow-sm flex items-center justify-center hover:shadow-md transition-shadow">
                   <SiVisa className="text-2xl text-[#1A1F71]" title="Visa" />
                 </div>
-                <div className="bg-white p-2 rounded shadow-sm">
+                <div className="bg-white p-2 rounded-lg shadow-sm flex items-center justify-center hover:shadow-md transition-shadow">
                   <SiMastercard
                     className="text-2xl text-[#EB001B]"
                     title="Mastercard"
                   />
                 </div>
               </div>
+              <p className="text-xs text-gray-500 mt-3 text-center">
+                All transactions are secured with SSL encryption
+              </p>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const MyAddedTickets = () => {
   const { user } = useAuth();
@@ -54,21 +55,9 @@ const MyAddedTickets = () => {
     });
   };
 
-  if (isLoading)
-    return (
-      <div className="text-center p-10">
-        <div class="spinner">
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</div>
-      </div>
-    );
+  if (isLoading) {
+    return <LoadingSpinner type="page" message="Loading your tickets..." />;
+  }
 
   return (
     <div className="p-8">

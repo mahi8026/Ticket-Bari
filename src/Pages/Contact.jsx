@@ -60,19 +60,19 @@ const Contact = () => {
     {
       icon: FaPhone,
       title: "Phone Support",
-      details: ["+880 123 456 7890", "+880 987 654 3210"],
+      details: ["+880 164 688 6795"],
       description: "Call us for immediate assistance",
     },
     {
       icon: FaEnvelope,
       title: "Email Support",
-      details: ["support@ticketbari.com", "info@ticketbari.com"],
+      details: ["mahimrahman07@gmail.com"],
       description: "Send us your queries anytime",
     },
     {
       icon: FaMapMarkerAlt,
       title: "Office Address",
-      details: ["House 123, Road 456", "Dhanmondi, Dhaka 1205", "Bangladesh"],
+      details: ["******", "Dhanmondi, Dhaka 1205", "Bangladesh"],
       description: "Visit our headquarters",
     },
     {

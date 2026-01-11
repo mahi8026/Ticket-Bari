@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import {
   FaCheck,
   FaTimes,
@@ -80,11 +81,7 @@ const ManageBookings = () => {
   };
 
   if (authLoading || bookingsLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="loading-spinner w-12 h-12"></div>
-      </div>
-    );
+    return <LoadingSpinner type="page" message="Loading bookings..." />;
   }
 
   const pendingBookings = vendorBookings.filter((b) => b.status === "pending");

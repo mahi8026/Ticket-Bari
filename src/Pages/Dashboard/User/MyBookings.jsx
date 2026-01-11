@@ -4,6 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 
 const MyBookings = () => {
   const { user, loading: authLoading } = useAuth();
@@ -63,20 +64,7 @@ const MyBookings = () => {
   };
 
   if (authLoading || bookingsLoading) {
-    return (
-      <div className="text-center p-10">
-        <div class="spinner">
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</div>
-      </div>
-    );
+    return <LoadingSpinner type="page" message="Loading your bookings..." />;
   }
 
   return (

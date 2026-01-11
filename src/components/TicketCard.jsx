@@ -111,7 +111,7 @@ const TicketCard = ({ ticket, index = 0 }) => {
       animate="visible"
       whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.3 }}
-      className="card-premium group hover-lift"
+      className="card-premium group hover-lift h-full flex flex-col"
     >
       {/* Image Section */}
       <div className="relative h-48 overflow-hidden rounded-t-2xl">
@@ -179,7 +179,7 @@ const TicketCard = ({ ticket, index = 0 }) => {
       </div>
 
       {/* Content Section */}
-      <div className="p-6">
+      <div className="p-6 flex-grow flex flex-col">
         {/* Title */}
         <motion.h2
           initial={{ opacity: 0 }}
@@ -270,6 +270,9 @@ const TicketCard = ({ ticket, index = 0 }) => {
             </div>
           </motion.div>
         )}
+
+        {/* Spacer to push price section to bottom */}
+        <div className="flex-grow"></div>
 
         {/* Price and Action Buttons */}
         <motion.div

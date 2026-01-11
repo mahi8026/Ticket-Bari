@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import SEOHead from "../components/SEO/SEOHead";
@@ -31,7 +32,6 @@ import {
   FaQuoteLeft,
   FaPlay,
   FaNewspaper,
-  FaCalendarAlt,
   FaPercent,
   FaFire,
   FaClock,
@@ -43,7 +43,7 @@ const TicketCardMini = ({ ticket, index = 0 }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
     whileHover={{ y: -8, scale: 1.02 }}
-    className="card-premium group"
+    className="card-premium group h-full flex flex-col"
   >
     <figure className="h-48 overflow-hidden relative rounded-t-2xl">
       <motion.img
@@ -74,7 +74,7 @@ const TicketCardMini = ({ ticket, index = 0 }) => (
         </span>
       </div>
     </figure>
-    <div className="p-6">
+    <div className="p-6 flex-grow flex flex-col">
       <motion.h2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -89,6 +89,7 @@ const TicketCardMini = ({ ticket, index = 0 }) => (
           {ticket.from} → {ticket.to}
         </span>
       </div>
+      <div className="flex-grow"></div>
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-2xl font-bold font-display text-primary-600 dark:text-primary-400">
@@ -161,17 +162,19 @@ const Home = () => {
     }
   };
 
-  const { data: advertisedTickets = [] } = useQuery({
+  const { data: advertisedTickets = [], refetch } = useQuery({
     queryKey: ["advertisedTickets"],
     queryFn: async () => {
       try {
+        // Add cache-busting parameter
+        const timestamp = new Date().getTime();
         const res = await axios.get(
-          "https://ticket-bari-server-pi.vercel.app/tickets/advertised"
+          `https://ticket-bari-server-pi.vercel.app/tickets/advertised?_t=${timestamp}`
         );
         return res.data;
-      } catch (error) {
+      } catch {
         console.warn("API not available, using mock data");
-        return [
+        const mockData = [
           {
             _id: "1",
             title: "Dhaka to Chittagong Express",
@@ -179,6 +182,7 @@ const Home = () => {
             to: "Chittagong",
             price: 45,
             ticketType: "Bus",
+            seatsAvailable: 25,
             imageUrl:
               "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1000&auto=format&fit=crop",
           },
@@ -189,6 +193,7 @@ const Home = () => {
             to: "Cox's Bazar",
             price: 85,
             ticketType: "Bus",
+            seatsAvailable: 18,
             imageUrl:
               "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1000&auto=format&fit=crop",
           },
@@ -199,12 +204,49 @@ const Home = () => {
             to: "Sylhet",
             price: 55,
             ticketType: "Train",
+            seatsAvailable: 42,
             imageUrl:
               "https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?q=80&w=1000&auto=format&fit=crop",
           },
+          {
+            _id: "4",
+            title: "Rangpur to Dhaka Luxury",
+            from: "Rangpur",
+            to: "Dhaka",
+            price: 65,
+            ticketType: "Bus",
+            seatsAvailable: 8,
+            imageUrl:
+              "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=1000&auto=format&fit=crop",
+          },
+          {
+            _id: "5",
+            title: "Barisal Launch Service",
+            from: "Dhaka",
+            to: "Barisal",
+            price: 35,
+            ticketType: "Launch",
+            seatsAvailable: 35,
+            imageUrl:
+              "https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=1000&auto=format&fit=crop",
+          },
+          {
+            _id: "6",
+            title: "Dhaka to Jessore Flight",
+            from: "Dhaka",
+            to: "Jessore",
+            price: 120,
+            ticketType: "Flight",
+            seatsAvailable: 12,
+            imageUrl:
+              "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1000&auto=format&fit=crop",
+          },
         ];
+        return mockData;
       }
     },
+    staleTime: 0, // Always refetch
+    cacheTime: 0, // Don't cache
   });
 
   const stats = [
@@ -345,52 +387,48 @@ const Home = () => {
         className="animate-fade-in"
       >
         {/* 1. HERO SECTION */}
-        <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-          <div className="hero-overlay" />
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url("https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1920&h=1080&fit=crop")`,
-            }}
-          />
-          <div className="relative z-10 container-custom text-center text-white">
-            <motion.h1
-              variants={itemVariants}
-              className="heading-1 text-white mb-6"
+        <section
+          className="relative min-h-screen flex items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url("https://i.ibb.co.com/8DrGKxBN/hero-illustration-16-07-2025.png")`,
+          }}
+        >
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="relative z-10 container mx-auto px-4 text-center">
+            <h1
+              className="text-5xl md:text-6xl font-bold text-white mb-6"
+              style={{
+                textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+              }}
             >
-              Travel Made <span className="text-secondary-400">Simple</span>
-            </motion.h1>
-            <motion.p
-              variants={itemVariants}
-              className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-white/90 leading-relaxed"
+              Travel Made <span className="text-blue-400">Simple</span>
+            </h1>
+            <p
+              className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto text-white leading-relaxed font-medium"
+              style={{
+                textShadow: "1px 1px 2px rgba(0,0,0,0.8)",
+              }}
             >
               Book Bus, Train, Launch, and Flight tickets seamlessly across
               Bangladesh. Your next adventure starts here with the best prices
               and instant confirmation.
-            </motion.p>
-            <motion.div variants={itemVariants} className="cta-buttons">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/tickets"
+                className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 text-lg"
               >
-                <Link
-                  to="/tickets"
-                  className="btn-primary-custom text-lg px-8 py-4"
-                >
-                  <FaTicketAlt className="mr-2" />
-                  Book Your Ticket
-                </Link>
-              </motion.div>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => toast.info("Demo video coming soon!")}
-                className="btn-ghost-custom bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30"
+                <FaTicketAlt className="mr-2" />
+                Book Your Ticket
+              </Link>
+              <Link
+                to="/login"
+                className="inline-flex items-center px-8 py-4 bg-white hover:bg-gray-100 text-gray-800 border-2 border-white font-semibold rounded-lg shadow-lg transition-all duration-200 text-lg"
               >
                 <FaPlay className="mr-2" />
-                Watch Demo
-              </motion.button>
-            </motion.div>
+                Try Demo
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -488,7 +526,7 @@ const Home = () => {
         </section>
 
         {/* 4. FEATURED DEALS SECTION */}
-        <section className="section-padding bg-surface-light dark:bg-surface-dark">
+        <section className="section-padding section-neutral">
           <div className="container-custom">
             <motion.div
               variants={itemVariants}
@@ -497,16 +535,10 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <FaFire className="text-3xl text-accent-500" />
-                <h2 className="heading-2 text-primary-600 dark:text-primary-400">
-                  Featured Deals
-                </h2>
-                <FaPercent className="text-3xl text-accent-500" />
-              </div>
-              <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
+              <h2 className="heading-2 mb-6">Featured Deals</h2>
+              <p className="text-xl text-neutral-600 dark:text-neutral-400 max-w-3xl mx-auto leading-relaxed">
                 Hand-picked exclusive offers with the best prices and premium
-                routes
+                routes across Bangladesh
               </p>
               <div className="flex items-center justify-center gap-2 mt-4">
                 <FaClock className="text-accent-500" />
@@ -565,7 +597,7 @@ const Home = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="text-center mt-12"
+                className="text-center mt-4"
               >
                 <Link to="/tickets" className="btn-outline-custom text-lg">
                   View All Deals

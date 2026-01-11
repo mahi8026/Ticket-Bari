@@ -20,9 +20,6 @@ import ManageTickets from "../Pages/Dashboard/Admin/ManageTickets";
 import MyBookings from "../Pages/Dashboard/User/MyBookings";
 import UserProfile from "../Pages/Dashboard/User/UserProfile";
 
-// Demo Components
-import AnimationDemo from "../components/Demo/AnimationDemo";
-
 // Guards
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
@@ -40,16 +37,13 @@ import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
 import AdvertiseTickets from "../Pages/Dashboard/Admin/AdvertiseTickets";
 import VendorProfile from "../Pages/Dashboard/Vendor/VendorProfile";
 import VendorOverview from "../Pages/Dashboard/Vendor/VendorOverview";
+import LoadingSpinner from "../components/Shared/LoadingSpinner";
 
 const DefaultDashboardRoute = () => {
   const { role, isLoading } = useRole();
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
-    );
+    return <LoadingSpinner type="page" message="Loading dashboard..." />;
   }
 
   if (role === "admin") {
@@ -76,7 +70,6 @@ export const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       { path: "blog", element: <Blog /> },
       { path: "help", element: <Help /> },
-      { path: "demo", element: <AnimationDemo /> },
       {
         path: "ticket/:id",
         element: (

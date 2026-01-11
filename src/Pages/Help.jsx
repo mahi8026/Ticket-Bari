@@ -327,7 +327,7 @@ const Help = () => {
                 href="tel:+8801234567890"
                 className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
-                +880 123 456 7890
+                +880 164 688 6795
               </a>
             </div>
 
@@ -345,7 +345,7 @@ const Help = () => {
                 href="mailto:support@ticketbari.com"
                 className="text-primary font-semibold hover:text-primary/80 transition-colors"
               >
-                support@ticketbari.com
+                mahimrahman07@gmail.com
               </a>
             </div>
 

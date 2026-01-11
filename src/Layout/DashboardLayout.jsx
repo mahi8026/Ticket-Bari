@@ -235,11 +235,7 @@ const DashboardLayout = () => {
             className="p-6 border-b border-neutral-200/50 dark:border-neutral-700/50 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20"
           >
             <div className="flex items-center space-x-3 mb-6">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="text-primary-600 dark:text-primary-400 text-3xl"
-              >
+              <motion.div className="text-primary-600 dark:text-primary-400 text-3xl">
                 <FaBus />
               </motion.div>
               <div>

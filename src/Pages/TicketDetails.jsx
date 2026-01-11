@@ -27,6 +27,7 @@ import {
 } from "react-icons/fa";
 import { MdLocationOn, MdAccessTime, MdEventSeat } from "react-icons/md";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import LoadingSpinner from "../components/Shared/LoadingSpinner";
 
 const countdownRenderer = ({ days, hours, minutes, seconds, completed }) => {
   if (completed) {
@@ -94,16 +95,7 @@ const TicketDetails = () => {
   };
 
   if (isLoading || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="loading-spinner w-12 h-12 mx-auto mb-4"></div>
-          <p className="text-neutral-600 dark:text-neutral-400">
-            Loading ticket details...
-          </p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner type="page" message="Loading ticket details..." />;
   }
 
   if (!ticket || !ticket._id) {
