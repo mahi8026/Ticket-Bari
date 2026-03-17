@@ -5,6 +5,7 @@ import { AuthContext } from "../providers/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import BookingModal from "../components/BookingModal";
+import SeatSelectionModal from "../components/SeatSelection/SeatSelectionModal";
 import Countdown from "react-countdown";
 import SEOHead from "../components/SEO/SEOHead";
 import {
@@ -54,6 +55,8 @@ const TicketDetails = () => {
   const { id } = useParams();
   const { user, loading } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSeatSelectionOpen, setIsSeatSelectionOpen] = useState(false);
+  const [selectedSeats, setSelectedSeats] = useState([]);
   const [currentTime] = useState(() => Date.now());
 
   const {
@@ -121,6 +124,16 @@ const TicketDetails = () => {
   const TransportIcon = getTransportIcon(ticket.ticketType);
   const transportColor = getTransportColor(ticket.ticketType);
 
+  const handleSeatSelectionConfirm = (seats) => {
+    setSelectedSeats(seats);
+    setIsSeatSelectionOpen(false);
+    setIsModalOpen(true);
+  };
+
+  const handleBookNowClick = () => {
+    setIsSeatSelectionOpen(true);
+  };
+
   return (
     <>
       <SEOHead
@@ -180,7 +193,7 @@ const TicketDetails = () => {
                   <div className="absolute bottom-6 left-6">
                     <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4">
                       <div className="flex items-center gap-2 text-primary-600">
-                        <FaDollarSign className="text-2xl" />
+                        <span className="text-2xl font-bold">৳</span>
                         <div>
                           <div className="text-3xl font-bold">
                             {ticket.price}
@@ -354,7 +367,7 @@ const TicketDetails = () => {
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                   <div>
                     <div className="text-4xl font-bold font-display text-primary-600 dark:text-primary-400 mb-2">
-                      ${ticket.price}
+                      ৳{ticket.price}
                       <span className="text-lg text-neutral-600 dark:text-neutral-400 ml-2">
                         per seat
                       </span>
@@ -375,15 +388,15 @@ const TicketDetails = () => {
                         ? "bg-neutral-300 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
                         : "btn-primary-custom"
                     }`}
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={handleBookNowClick}
                     disabled={isBookDisabled}
                   >
-                    <FaTicketAlt />
+                    <MdEventSeat />
                     {hasDeparted
                       ? "Departed"
                       : isSoldOut
-                      ? "Sold Out"
-                      : "Book Now"}
+                        ? "Sold Out"
+                        : "Select Seats & Book"}
                   </motion.button>
                 </div>
               </div>
@@ -392,11 +405,20 @@ const TicketDetails = () => {
         </div>
       </div>
 
+      <SeatSelectionModal
+        isOpen={isSeatSelectionOpen}
+        onClose={() => setIsSeatSelectionOpen(false)}
+        ticket={ticket}
+        onConfirm={handleSeatSelectionConfirm}
+        maxSeats={5}
+      />
+
       <BookingModal
         ticket={ticket}
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
         refetchTickets={refetch}
+        selectedSeats={selectedSeats}
       />
     </>
   );

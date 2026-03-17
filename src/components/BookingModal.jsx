@@ -6,20 +6,32 @@ import { AuthContext } from "../providers/AuthProvider";
 import React from "react";
 import PaymentForm from "./PaymentForm";
 
-const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
+const BookingModal = ({
+  ticket,
+  isOpen,
+  closeModal,
+  refetchTickets,
+  selectedSeats = [],
+}) => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(selectedSeats.length || 1);
   const [loading, setLoading] = useState(false);
   const [bookingResult, setBookingResult] = useState(null);
 
   const maxQuantity = parseInt(ticket.seatsAvailable) || 0;
-
   const unitPrice = parseFloat(ticket.price);
+
+  // Calculate seat charges from selected seats
+  const seatCharges = selectedSeats.reduce(
+    (sum, seat) => sum + (seat.price || 0),
+    0,
+  );
+  const totalPrice = unitPrice * quantity + seatCharges;
 
   const handleClose = () => {
     setBookingResult(null);
-    setQuantity(1);
+    setQuantity(selectedSeats.length || 1);
     closeModal();
   };
 
@@ -32,7 +44,9 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
     e.preventDefault();
     setLoading(true);
 
-    const totalPrice = parseFloat(ticket.price || 0) * parseInt(quantity || 1);
+    const finalQuantity =
+      selectedSeats.length > 0 ? selectedSeats.length : quantity;
+    const finalTotalPrice = unitPrice * finalQuantity + seatCharges;
 
     const bookingInfo = {
       ticketId: ticket._id,
@@ -40,8 +54,15 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
       transportType:
         ticket.ticketType || ticket.transportType || "Not Specified",
       unitPrice: unitPrice,
-      quantity: quantity,
-      totalPrice: totalPrice,
+      quantity: finalQuantity,
+      totalPrice: finalTotalPrice,
+      seatCharges: seatCharges,
+      selectedSeats: selectedSeats.map((seat) => ({
+        number: seat.number,
+        type: seat.type,
+        label: seat.label,
+        price: seat.price,
+      })),
       departureDate: ticket.departureDate,
       userEmail: user?.email,
       userName: user?.displayName,
@@ -61,8 +82,8 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
 
         Swal.fire({
           title: "Booking Saved!",
-          text: `Proceed to payment below to secure your tickets. Total: $${totalPrice.toFixed(
-            2
+          text: `Proceed to payment below to secure your tickets. Total: ৳${finalTotalPrice.toFixed(
+            2,
           )}.`,
           icon: "success",
           confirmButtonText: "OK",
@@ -76,7 +97,7 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
       Swal.fire(
         "Error",
         "Failed to submit booking. Please try again.",
-        "error"
+        "error",
       );
     } finally {
       setLoading(false);
@@ -106,40 +127,77 @@ const BookingModal = ({ ticket, isOpen, closeModal, refetchTickets }) => {
                   />
                 ) : (
                   <form onSubmit={handleBooking} className="mt-4 space-y-4">
-                    <p>Ticket Price (per unit): **${unitPrice.toFixed(2)}**</p>
-                    <p className="text-sm text-gray-500">
-                      Available: **{maxQuantity}** seats left
-                    </p>
+                    {selectedSeats.length > 0 ? (
+                      <div className="space-y-3">
+                        <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+                          <p className="font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+                            Selected Seats:
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedSeats.map((seat) => (
+                              <span
+                                key={seat.number}
+                                className="inline-flex items-center gap-1 px-3 py-1 bg-primary-500 text-white rounded-full text-sm font-medium"
+                              >
+                                Seat {seat.number}
+                                {seat.price > 0 && ` (+৳${seat.price})`}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                          Base Price: ৳{unitPrice.toFixed(2)} ×{" "}
+                          {selectedSeats.length} seats
+                        </p>
+                        {seatCharges > 0 && (
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            Seat Charges: ৳{seatCharges.toFixed(2)}
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <>
+                        <p>
+                          Ticket Price (per unit): **৳{unitPrice.toFixed(2)}**
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Available: **{maxQuantity}** seats left
+                        </p>
 
-                    <div>
-                      <label
-                        htmlFor="quantity"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Quantity
-                      </label>
+                        <div>
+                          <label
+                            htmlFor="quantity"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Quantity
+                          </label>
 
-                      <input
-                        type="number"
-                        id="quantity"
-                        value={quantity}
-                        onChange={(e) =>
-                          setQuantity(
-                            Math.min(parseInt(e.target.value) || 1, maxQuantity)
-                          )
-                        }
-                        min="1"
-                        max={maxQuantity}
-                        required
-                        className="form-input-custom"
-                      />
-                    </div>
+                          <input
+                            type="number"
+                            id="quantity"
+                            value={quantity}
+                            onChange={(e) =>
+                              setQuantity(
+                                Math.min(
+                                  parseInt(e.target.value) || 1,
+                                  maxQuantity,
+                                ),
+                              )
+                            }
+                            min="1"
+                            max={maxQuantity}
+                            required
+                            className="form-input-custom"
+                          />
+                        </div>
+                      </>
+                    )}
 
                     <div className="bg-gray-100 p-3 rounded-lg">
                       <p className="text-lg font-bold">
                         Total:{" "}
                         <span className="text-primary">
-                          ${(unitPrice * (parseInt(quantity) || 1)).toFixed(2)}
+                          ৳{totalPrice.toFixed(2)}
                         </span>
                       </p>
                     </div>

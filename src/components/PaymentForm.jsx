@@ -3,8 +3,22 @@ import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { AuthContext } from "../providers/AuthProvider";
+import PaymentMethodSelector from "./Payment/PaymentMethodSelector";
 
-const PaymentForm = ({ bookingDetails, handlePaymentSuccess }) => {
+const PaymentForm = ({
+  bookingDetails,
+  handlePaymentSuccess,
+  showMethodSelector = false,
+}) => {
+  // If method selector is enabled, show it instead of direct card payment
+  if (showMethodSelector) {
+    return (
+      <PaymentMethodSelector
+        bookingDetails={bookingDetails}
+        handlePaymentSuccess={handlePaymentSuccess}
+      />
+    );
+  }
   const {
     totalPrice: price,
     _id: bookingId,
@@ -77,21 +91,21 @@ const PaymentForm = ({ bookingDetails, handlePaymentSuccess }) => {
       try {
         const res = await axiosSecure.patch(
           `/bookings/pay/${bookingId}`,
-          paymentData
+          paymentData,
         );
 
         if (res.data.success) {
           Swal.fire(
             "Success!",
             `Payment complete. Transaction ID: ${paymentIntent.id}.`,
-            "success"
+            "success",
           );
           handlePaymentSuccess();
         } else {
           Swal.fire(
             "Server Error",
             "Payment succeeded, but failed to update booking status and inventory.",
-            "error"
+            "error",
           );
         }
       } catch (err) {
@@ -99,7 +113,7 @@ const PaymentForm = ({ bookingDetails, handlePaymentSuccess }) => {
         Swal.fire(
           "Finalization Error",
           "Could not save payment to server database. Please contact support.",
-          "error"
+          "error",
         );
       }
     }
